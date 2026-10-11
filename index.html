@@ -1,0 +1,2688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TD Microfinance Business</title>
+<meta name="description" content="TD Microfinance Business — loan &amp; cash flow tracker.">
+<meta name="theme-color" content="#93816B">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TD Microfinance">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#2E2C29;
+    --ink-soft:#79746C;
+    --maroon:#5C5347;
+    --terracotta:#93816B;
+    --terracotta-deep:#7E6D59;
+    --sage:#6E7A63;
+    --sage-deep:#5C6653;
+    --cream:#F6F4EF;
+    --card:#FFFFFF;
+    --line:#E7E2D6;
+    --lavender-bg:#ECE9E3; --lavender-ink:#6B6155;
+    --blue-bg:#E9EBE6; --blue-ink:#5B6A5F;
+    --mint-bg:#EAEDE6; --mint-ink:#59694F;
+    --gold-bg:#F2ECDD; --gold-ink:#8A7247;
+    --pink-bg:#EFE8E0; --pink-ink:#8C7057;
+    --magenta-bg:#EEE2DF; --magenta-ink:#95534A;
+    --green-bg:#E9ECE3; --green-ink:#556B4C;
+    --radius-s:8px; --radius-m:14px; --radius-l:22px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;min-height:100%;}
+  body{
+    background:
+      radial-gradient(1200px 380px at 20% -10%, #EFEAE0 0%, rgba(239,234,224,0) 60%),
+      radial-gradient(900px 320px at 90% -15%, #ECE8E2 0%, rgba(236,232,226,0) 55%),
+      var(--cream);
+    color:var(--ink);
+    font-family:'Public Sans', -apple-system, sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  h1,h2,h3,h4,.display{
+    font-family:'Fraunces', Georgia, serif;
+    letter-spacing:-0.01em;
+    margin:0;
+    font-weight:600;
+  }
+  button{font-family:inherit;}
+  ::selection{background:var(--terracotta); color:#fff;}
+
+  #app{
+    max-width:1180px;
+    margin:0 auto;
+    padding:20px 20px 60px 20px;
+  }
+
+  /* Header card */
+  .header-card{
+    background:var(--card);
+    border-radius:var(--radius-l);
+    padding:22px 24px;
+    box-shadow:0 1px 2px rgba(46,42,38,0.04);
+    margin-bottom:16px;
+  }
+  .brand-row{display:flex; align-items:center; gap:12px; margin-bottom:18px;}
+  .brand-badge{
+    width:42px; height:42px; border-radius:50%;
+    border:2px solid var(--terracotta);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Fraunces', serif; font-weight:700; font-size:15px; color:var(--terracotta);
+    flex-shrink:0; background:#fff;
+  }
+  .brand-title{font-size:21px; color:var(--maroon); font-weight:700;}
+  .brand-sub{font-size:12.5px; color:var(--ink-soft); margin-top:1px;}
+
+  nav.tabs{
+    display:flex; gap:6px; flex-wrap:wrap;
+  }
+  .tab-btn{
+    display:flex; align-items:center; gap:7px;
+    padding:9px 15px;
+    border-radius:20px;
+    border:none; background:transparent;
+    color:var(--ink-soft); font-size:13.5px; font-weight:600;
+    cursor:pointer; white-space:nowrap;
+    transition:background .15s ease, color .15s ease;
+  }
+  .tab-btn .ic{font-size:15px; line-height:1;}
+  .tab-btn:hover{background:#F6F1E8; color:var(--ink);}
+  .tab-btn.active{background:var(--terracotta); color:#fff;}
+
+  /* Toolbar */
+  .toolbar{
+    display:flex; align-items:center; flex-wrap:wrap; gap:10px;
+    background:var(--card);
+    border-radius:var(--radius-m);
+    padding:12px 16px;
+    margin-bottom:12px;
+    box-shadow:0 1px 2px rgba(46,42,38,0.03);
+  }
+  .saved-dot{display:flex; align-items:center; gap:6px; font-size:12.5px; color:var(--ink-soft); font-weight:600;}
+  .saved-dot .dot{width:7px;height:7px;border-radius:50%; background:var(--sage); flex-shrink:0;}
+  .toolbar-spacer{flex:1;}
+  .pill-btn{
+    display:inline-flex; align-items:center; gap:6px;
+    padding:8px 14px; border-radius:20px;
+    border:1px solid var(--line); background:#fff;
+    font-size:12.5px; font-weight:600; color:var(--ink);
+    cursor:pointer; transition:border-color .15s ease, background .15s ease;
+    white-space:nowrap;
+  }
+  .pill-btn:hover{background:#F8F5EF; border-color:#D9D0BE;}
+  .pill-btn.active-badge{background:var(--blue-bg); border-color:transparent; color:var(--blue-ink);}
+  .pill-btn.fill-sage{background:var(--sage); border-color:transparent; color:#fff;}
+  .pill-btn.fill-sage:hover{background:var(--sage-deep);}
+  .pill-btn.fill-terracotta{background:var(--terracotta); border-color:transparent; color:#fff;}
+  .pill-btn.fill-terracotta:hover{background:var(--terracotta-deep);}
+  .pill-btn.warn-outline{border-color:#E3D3CE; color:var(--magenta-ink);}
+  .pill-btn.warn-outline:hover{background:var(--magenta-bg);}
+  .pill-btn:disabled{opacity:0.5; cursor:not-allowed;}
+
+  .info-banner{
+    font-size:12.5px; color:var(--ink-soft); line-height:1.6;
+    background:var(--card); border-radius:var(--radius-m);
+    padding:12px 16px; margin-bottom:16px;
+    box-shadow:0 1px 2px rgba(46,42,38,0.03);
+  }
+  .info-banner strong{color:var(--ink);}
+
+  /* Stat card grids */
+  .stat-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:16px;}
+  @media (max-width:900px){ .stat-grid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:520px){ .stat-grid{grid-template-columns:1fr;} }
+
+  .stat-box{
+    border-radius:var(--radius-m);
+    padding:16px 18px;
+  }
+  .stat-box .lbl{display:flex; align-items:center; gap:7px; font-size:12.5px; font-weight:600; opacity:0.85;}
+  .stat-box .amt{font-family:'Fraunces',serif; font-weight:700; font-size:23px; margin-top:8px;}
+  .stat-box.lavender{background:var(--lavender-bg); color:var(--lavender-ink);}
+  .stat-box.blue{background:var(--blue-bg); color:var(--blue-ink);}
+  .stat-box.mint{background:var(--mint-bg); color:var(--mint-ink);}
+  .stat-box.gold{background:var(--gold-bg); color:var(--gold-ink);}
+  .stat-box.pink{background:var(--pink-bg); color:var(--pink-ink);}
+  .stat-box.magenta{background:var(--magenta-bg); color:var(--magenta-ink);}
+  .stat-box.green{background:var(--green-bg); color:var(--green-ink);}
+  .stat-box .amt.ink{color:var(--ink);}
+
+  /* Capital & withdrawals panel */
+  .panel{
+    background:var(--card); border-radius:var(--radius-l);
+    padding:18px 20px; margin-bottom:16px;
+    box-shadow:0 1px 2px rgba(46,42,38,0.03);
+  }
+  .panel-head{
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;
+  }
+  .panel-head h3{font-size:16.5px; display:flex; align-items:center; gap:8px;}
+  .panel-actions{display:flex; gap:8px; flex-wrap:wrap;}
+
+  /* Generic content card */
+  .card{
+    background:var(--card); border:1px solid var(--line); border-radius:var(--radius-m);
+    padding:20px;
+  }
+  .card-plain{background:var(--card); border-radius:var(--radius-l); padding:18px 20px; box-shadow:0 1px 2px rgba(46,42,38,0.03);}
+
+  .section-head{display:flex; align-items:center; gap:8px; font-size:15px; font-weight:700; margin-bottom:14px;}
+  .section-head .ic{font-size:16px;}
+
+  .two-col{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  @media (max-width:900px){ .two-col{grid-template-columns:1fr;} }
+
+  /* Lists / rows */
+  .row-list{display:flex; flex-direction:column; gap:0;}
+  .list-row{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    padding:13px 4px; border-bottom:1px solid var(--line);
+  }
+  .list-row:last-child{border-bottom:none;}
+  .row-title{font-size:14px; font-weight:700;}
+  .row-sub{font-size:12px; color:var(--ink-soft); margin-top:2px;}
+  .row-amount{font-family:'Fraunces',serif; font-weight:700; font-size:14.5px;}
+  .follow-btn{
+    display:inline-flex; align-items:center; gap:5px;
+    padding:7px 13px; border-radius:20px; border:1px solid #E3D3CE;
+    background:#fff; color:var(--magenta-ink); font-size:12px; font-weight:700;
+    cursor:pointer; white-space:nowrap;
+  }
+  .follow-btn:hover{background:var(--magenta-bg);}
+  .empty-note{color:var(--ink-soft); font-size:13px; text-align:center; padding:26px 10px;}
+
+  .tag{font-size:10.5px; padding:3px 9px; border-radius:20px; font-weight:700; display:inline-block;}
+  .tag.on-track{background:var(--green-bg); color:var(--green-ink);}
+  .tag.due{background:var(--gold-bg); color:var(--gold-ink);}
+  .tag.overdue{background:var(--magenta-bg); color:var(--magenta-ink);}
+  .tag.pending{background:#EFEAE0; color:var(--ink-soft);}
+  .tag.paid{background:var(--green-bg); color:var(--green-ink);}
+  .tag.flat{background:var(--blue-bg); color:var(--blue-ink);}
+  .tag.diminishing{background:var(--lavender-bg); color:var(--lavender-ink);}
+  .tag.flexible{background:var(--pink-bg); color:var(--pink-ink);}
+
+  /* Buttons (forms/modals) */
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:7px;
+    padding:10px 17px; border-radius:20px; border:1px solid transparent;
+    font-size:13.5px; font-weight:700; cursor:pointer;
+    transition:transform .08s ease, background .15s ease, border-color .15s ease;
+  }
+  .btn:active{transform:scale(0.98);}
+  .btn-primary{background:var(--terracotta); color:#fff;}
+  .btn-primary:hover{background:var(--terracotta-deep);}
+  .btn-sage{background:var(--sage); color:#fff;}
+  .btn-sage:hover{background:var(--sage-deep);}
+  .btn-ghost{background:transparent; color:var(--ink); border-color:var(--line);}
+  .btn-ghost:hover{background:#F8F5EF;}
+  .btn-warn{background:#fff; color:var(--magenta-ink); border-color:#E3D3CE;}
+  .btn-warn:hover{background:var(--magenta-bg);}
+  .btn-sm{padding:7px 12px; font-size:12.5px;}
+  .btn-block{width:100%;}
+  .btn:disabled{opacity:0.45; cursor:not-allowed;}
+
+  /* Forms */
+  label{font-size:12.5px; font-weight:700; display:block; margin-bottom:6px; color:var(--ink);}
+  .field{margin-bottom:14px;}
+  .field-hint{font-size:11.5px; color:var(--ink-soft); margin-top:5px; line-height:1.5;}
+  input[type=text], input[type=number], input[type=tel], input[type=date], input[type=password], select, textarea{
+    width:100%; padding:10px 12px;
+    border:1px solid var(--line); border-radius:var(--radius-s);
+    background:#fff; font-size:14px; font-family:inherit; color:var(--ink);
+    outline:none; transition:border-color .12s ease, box-shadow .12s ease;
+  }
+  input:focus, select:focus, textarea:focus{
+    border-color:var(--terracotta); box-shadow:0 0 0 3px rgba(201,123,74,0.15);
+  }
+  input:disabled{background:#F7F4EE; color:var(--ink-soft);}
+  .field-row{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  .field-row.single-col{grid-template-columns:1fr;}
+  .radio-group{display:flex; gap:8px; flex-wrap:wrap;}
+  .radio-pill{
+    padding:8px 14px; border:1px solid var(--line); border-radius:20px;
+    font-size:13px; cursor:pointer; background:#fff; user-select:none; font-weight:600;
+  }
+  .radio-pill.active{background:var(--ink); color:#fff; border-color:var(--ink);}
+  .type-pill.active[data-val="flat"]{background:var(--blue-ink);}
+  .type-pill.active[data-val="diminishing"]{background:var(--lavender-ink);}
+  .type-pill.active[data-val="flexible"]{background:var(--pink-ink);}
+
+  /* Toast */
+  #toast{
+    position:fixed; bottom:26px; left:50%; transform:translateX(-50%) translateY(20px);
+    background:var(--ink); color:#fff; padding:12px 20px; border-radius:20px;
+    font-size:13px; opacity:0; pointer-events:none; transition:all .25s ease;
+    z-index:300; font-weight:600;
+  }
+  #toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+
+  /* Modal */
+  .modal-backdrop{
+    position:fixed; inset:0; background:rgba(46,42,38,0.42);
+    display:none; align-items:center; justify-content:center; z-index:200; padding:18px;
+  }
+  .modal-backdrop.show{display:flex;}
+  .modal{
+    background:#fff; border-radius:var(--radius-l); padding:24px;
+    width:100%; max-width:420px; max-height:88vh; overflow-y:auto;
+  }
+  .modal.modal-lg{max-width:680px;}
+  .modal h3{font-size:18px; margin-bottom:5px;}
+  .modal p.desc{font-size:13px; color:var(--ink-soft); margin:0 0 16px 0; line-height:1.5;}
+  .modal-actions{display:flex; gap:10px; margin-top:18px;}
+  .modal-actions .btn{flex:1;}
+
+  table.mini-table{width:100%; border-collapse:collapse; font-size:13px;}
+  table.mini-table th{
+    text-align:left; font-size:10.5px; text-transform:uppercase; letter-spacing:0.03em;
+    color:var(--ink-soft); font-weight:700; padding:6px 8px; border-bottom:1px solid var(--line);
+  }
+  table.mini-table td{padding:8px 8px; border-bottom:1px solid var(--line);}
+  table.mini-table tr:last-child td{border-bottom:none;}
+
+  /* Printable statement */
+  .statement-head{display:flex; justify-content:space-between; align-items:flex-start; padding-bottom:14px; margin-bottom:16px; border-bottom:2px solid var(--ink);}
+  .statement-brand{font-family:'Fraunces',serif; font-size:19px; font-weight:700;}
+  .statement-branch{font-size:12px; color:var(--ink-soft); margin-top:2px;}
+  .statement-date{font-size:12px; color:var(--ink-soft); text-align:right;}
+  .statement-section{margin-bottom:16px;}
+  .statement-row{display:flex; justify-content:space-between; gap:12px; padding:6px 0; border-bottom:1px dashed var(--line); font-size:13.5px;}
+  .statement-row span{color:var(--ink-soft);}
+  .statement-row strong{font-weight:700; text-align:right;}
+  #borrower-statement h4{font-size:11.5px; text-transform:uppercase; letter-spacing:0.04em; color:var(--ink-soft); font-weight:700; margin:18px 0 8px 0;}
+  .statement-sign{display:flex; justify-content:space-between; gap:30px; margin-top:30px;}
+  .statement-sign > div{flex:1; text-align:center; border-top:1px solid var(--ink); padding-top:6px; font-size:11px; color:var(--ink-soft);}
+  .stmt-loan-block{padding-bottom:10px;}
+  .stmt-loan-block + .stmt-loan-block{margin-top:26px; border-top:2px dashed var(--line); padding-top:22px;}
+  .stmt-loan-title{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;}
+  .stmt-loan-title h4{font-size:15px; margin:0;}
+  .stmt-loan-title{font-family:'Fraunces',serif; font-size:16px; font-weight:700; margin:16px 0 10px 0;}
+
+  @media print{
+    body{background:#fff !important;}
+    body *{visibility:hidden;}
+    #borrower-statement, #borrower-statement *{visibility:visible;}
+    #borrower-statement{position:absolute; top:0; left:0; width:100%; padding:12px;}
+    .no-print{display:none !important;}
+    body.print-single-loan .stmt-loan-block{display:none;}
+    body.print-single-loan .stmt-loan-block.print-target{display:block;}
+  }
+
+  .fire-btn{
+    background:none; border:none; cursor:pointer; font-size:16px; padding:4px 6px;
+    border-radius:8px; line-height:1;
+  }
+  .fire-btn:hover{background:#EEE8DD;}
+
+  .view{display:none;}
+  .view.active{display:block;}
+
+  .empty-state{text-align:center; padding:40px 16px; color:var(--ink-soft); font-size:13px;}
+
+  /* App lock */
+  #lock-overlay{
+    position:fixed; inset:0; z-index:500;
+    background:var(--cream);
+    display:flex; align-items:center; justify-content:center;
+    padding:20px;
+  }
+  .lock-card{
+    background:var(--card); border-radius:var(--radius-l);
+    padding:32px 28px; max-width:380px; width:100%; text-align:center;
+    box-shadow:0 6px 28px rgba(46,42,38,0.10);
+  }
+  .lock-title{font-size:19px; margin-bottom:6px;}
+  .lock-sub{font-size:13px; color:var(--ink-soft); margin:0 0 20px 0; line-height:1.5;}
+  .lock-card input[type=password]{margin-bottom:0;}
+  .lock-error{color:var(--magenta-ink); font-size:12.5px; margin:8px 0 4px 0; text-align:left;}
+  .lock-forgot{
+    display:inline-block; margin-top:16px; font-size:12px; color:var(--ink-soft);
+    text-decoration:underline; text-underline-offset:3px; cursor:pointer;
+  }
+  .lock-forgot:hover{color:var(--ink);}
+
+  ::-webkit-scrollbar{width:8px; height:8px;}
+  ::-webkit-scrollbar-thumb{background:#DED6C4; border-radius:8px;}
+
+  @media (max-width:640px){
+    #app{padding:12px 12px 50px 12px;}
+    .header-card{padding:16px 16px;}
+    nav.tabs{overflow-x:auto; flex-wrap:nowrap; -webkit-overflow-scrolling:touch; padding-bottom:2px;}
+    .stat-grid{gap:10px;}
+  }
+</style>
+</head>
+<body>
+
+<div id="lock-overlay">
+  <div class="lock-card">
+    <div class="brand-badge" style="margin:0 auto 14px auto;">TD</div>
+
+    <div id="lock-setup-view">
+      <h3 class="lock-title">Set an app password</h3>
+      <p class="lock-sub">You'll need to enter this every time you open the app on this device.</p>
+      <input type="password" id="lock-setup-pw1" placeholder="New password" style="margin-bottom:10px;">
+      <input type="password" id="lock-setup-pw2" placeholder="Confirm password" style="margin-bottom:8px;">
+      <div class="lock-error" id="lock-setup-error"></div>
+      <button class="btn btn-primary btn-block" id="lock-setup-save">Set password</button>
+      <div class="field-hint" style="margin-top:16px; text-align:left;">This is a simple on-device lock, not encryption — it stops casual snooping, not a determined attacker. Don't rely on it alone for sensitive data.</div>
+    </div>
+
+    <div id="lock-enter-view" style="display:none;">
+      <h3 class="lock-title">Enter password</h3>
+      <p class="lock-sub">TD Microfinance Business is locked on this device.</p>
+      <input type="password" id="lock-enter-pw" placeholder="Password" style="margin-bottom:8px;">
+      <div class="lock-error" id="lock-enter-error" style="display:none;">Incorrect password. Try again.</div>
+      <button class="btn btn-primary btn-block" id="lock-enter-unlock">Unlock</button>
+      <div class="lock-forgot" id="lock-forgot">Forgot password? Reset this device</div>
+    </div>
+  </div>
+</div>
+
+<div id="app">
+
+  <div class="header-card">
+    <div class="brand-row">
+      <div class="brand-badge">TD</div>
+      <div>
+        <div class="brand-title">TD Microfinance Business</div>
+        <div class="brand-sub">loan &amp; cash flow tracker</div>
+      </div>
+    </div>
+    <nav class="tabs" id="tabs"></nav>
+  </div>
+
+  <div class="toolbar">
+    <div class="saved-dot"><span class="dot"></span> <span id="saved-label">Saved</span></div>
+    <button class="pill-btn active-badge" id="btn-compounding-toggle">🔥 Compounding interest active</button>
+    <div class="toolbar-spacer"></div>
+    <button class="pill-btn" id="btn-export">⬇️ Export all data</button>
+    <button class="pill-btn" id="btn-backup">💾 Backup data</button>
+    <button class="pill-btn" id="btn-restore">⬆️ Restore</button>
+    <button class="pill-btn" id="btn-change-password">🔒 Change password</button>
+  </div>
+
+  <div class="info-banner" id="compounding-info">
+    <strong>Unpaid interest compounds every cycle</strong> — on Flexible loans it rolls into the principal balance automatically at the end of each period and earns interest going forward. Use the 🔥 button on any loan to backtrack payments or manually adjust the balance.
+  </div>
+
+  <!-- ================= DASHBOARD ================= -->
+  <section class="view active" id="view-dashboard">
+
+    <div class="stat-grid">
+      <div class="stat-box lavender"><div class="lbl">🏦 Capital added</div><div class="amt" id="st-capital">₱0.00</div></div>
+      <div class="stat-box blue"><div class="lbl">📤 Capital deployed</div><div class="amt" id="st-deployed">₱0.00</div></div>
+      <div class="stat-box mint"><div class="lbl">💵 Cash available</div><div class="amt" id="st-cash">₱0.00</div></div>
+      <div class="stat-box gold"><div class="lbl">📈 Profit earned</div><div class="amt" id="st-profit">₱0.00</div></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h3>🏛️ Capital &amp; withdrawals</h3>
+        <div class="panel-actions">
+          <button class="pill-btn fill-sage" id="btn-add-capital">+ Add capital</button>
+          <button class="pill-btn fill-terracotta" id="btn-withdraw">+ Withdraw funds</button>
+          <button class="pill-btn" id="btn-capital-history">📖 Capital history</button>
+          <button class="pill-btn" id="btn-withdrawal-history">📖 Withdrawal history</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-box pink"><div class="lbl">📮 Total outstanding</div><div class="amt" id="st-outstanding">₱0.00</div></div>
+      <div class="stat-box pink"><div class="lbl">🤝 Total lent</div><div class="amt" id="st-lent">₱0.00</div></div>
+      <div class="stat-box magenta"><div class="lbl">⚠️ Overdue loans</div><div class="amt" id="st-overdue">0</div></div>
+      <div class="stat-box green"><div class="lbl">✅ Collected</div><div class="amt" id="st-collected">₱0.00</div></div>
+    </div>
+
+    <div class="two-col">
+      <div class="card-plain">
+        <div class="section-head"><span class="ic">⏰</span> Upcoming payments (next 7 days)</div>
+        <div class="row-list" id="db-upcoming"></div>
+      </div>
+      <div class="card-plain">
+        <div class="section-head"><span class="ic">⚠️</span> Needs follow-up</div>
+        <div class="row-list" id="db-followup"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= BORROWERS ================= -->
+  <section class="view" id="view-borrowers">
+    <div class="card-plain">
+      <div class="panel-head" style="margin-bottom:14px;">
+        <div class="section-head" style="margin-bottom:0;"><span class="ic">👥</span> Member accounts</div>
+        <button class="btn btn-primary btn-sm" id="btn-add-borrower">+ Add borrower</button>
+      </div>
+      <div class="row-list" id="borrowers-list"></div>
+    </div>
+  </section>
+
+  <!-- ================= LOANS ================= -->
+  <section class="view" id="view-loans">
+    <div class="card-plain">
+      <div class="panel-head" style="margin-bottom:14px;">
+        <div class="section-head" style="margin-bottom:0;"><span class="ic">📄</span> All loans</div>
+        <button class="btn btn-primary btn-sm" id="btn-add-loan">+ New loan</button>
+      </div>
+      <div class="row-list" id="loans-list"></div>
+    </div>
+  </section>
+
+  <!-- ================= PAYMENTS ================= -->
+  <section class="view" id="view-payments">
+    <div class="two-col">
+      <div class="card-plain">
+        <div class="section-head"><span class="ic">💳</span> Record a payment</div>
+        <div class="field">
+          <label>Loan</label>
+          <select id="pay-loan"></select>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Amount</label>
+            <input type="number" id="pay-amount" min="0" step="0.01" placeholder="e.g. 350, or 0 if unpaid">
+          </div>
+          <div class="field">
+            <label>Date</label>
+            <input type="date" id="pay-date">
+          </div>
+        </div>
+        <div class="field">
+          <label>Apply to installment (optional)</label>
+          <select id="pay-installment"><option value="">Automatic by payment date</option></select>
+          <div class="field-hint">For flat-rate loans, choose a future installment to mark it paid early. You may also make multiple partial payments toward the same installment.</div>
+        </div>
+        <div class="field">
+          <label>Note (optional)</label>
+          <input type="text" id="pay-note" placeholder="e.g. Cash payment, in person">
+        </div>
+        <button class="btn btn-primary btn-block" id="btn-record-payment">Record payment</button>
+        <div id="pay-preview" class="field-hint" style="margin-top:12px;"></div>
+      </div>
+      <div class="card-plain">
+        <div class="section-head"><span class="ic">🧾</span> Recent payments</div>
+        <div class="row-list" id="payments-list"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CASH FLOW ================= -->
+  <section class="view" id="view-cashflow">
+    <div class="card-plain">
+      <div class="section-head"><span class="ic">📈</span> Cash flow ledger</div>
+      <div class="field-hint" style="margin-bottom:12px;">Every capital injection, disbursement, collection and withdrawal, most recent first.</div>
+      <table class="mini-table">
+        <thead><tr><th>Date</th><th>Type</th><th>Detail</th><th>Amount</th><th>Running cash</th></tr></thead>
+        <tbody id="cashflow-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ================= SUMMARY ================= -->
+  <section class="view" id="view-summary">
+    <div class="two-col">
+      <div class="card-plain">
+        <div class="section-head"><span class="ic">📋</span> By loan type</div>
+        <table class="mini-table">
+          <thead><tr><th>Type</th><th>Loans</th><th>Principal</th><th>Outstanding</th></tr></thead>
+          <tbody id="summary-types"></tbody>
+        </table>
+      </div>
+      <div class="card-plain">
+        <div class="section-head"><span class="ic">🏅</span> By borrower</div>
+        <table class="mini-table">
+          <thead><tr><th>Borrower</th><th>Loans</th><th>Outstanding</th><th>Status</th></tr></thead>
+          <tbody id="summary-borrowers"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CALCULATOR ================= -->
+  <section class="view" id="view-calculator">
+    <div class="two-col" style="align-items:start;">
+      <div class="card-plain">
+        <div class="section-head"><span class="ic">🧮</span> Loan calculator</div>
+
+        <div class="field">
+          <label>Loan type</label>
+          <div class="radio-group" id="cc-type">
+            <div class="radio-pill type-pill active" data-val="flat">Flat rate</div>
+            <div class="radio-pill type-pill" data-val="diminishing">Diminishing</div>
+            <div class="radio-pill type-pill" data-val="flexible">Flexible</div>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label>Loan amount</label>
+            <input type="number" id="cc-amount" min="500" step="0.01" placeholder="Enter loan amount">
+          </div>
+          <div class="field">
+            <label>Interest rate (% / month)</label>
+            <input type="number" id="cc-rate" min="0.5" max="10" step="0.1" placeholder="Enter rate">
+          </div>
+        </div>
+        <div class="field-row" id="cc-term-row">
+          <div class="field" id="cc-term-wrap">
+            <label>Term (days)</label>
+            <input type="number" id="cc-term" min="15" max="365" step="15" placeholder="Enter term">
+          </div>
+          <div class="field">
+            <label>Collection frequency</label>
+            <select id="cc-cycle">
+              <option value="1">Daily</option>
+              <option value="7">Weekly</option>
+              <option value="30" selected>Monthly</option>
+          <option value="0">Flexible (anytime)</option>
+              <option value="0">Flexible (anytime)</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="field" id="cc-skip-wrap" style="display:none;">
+          <label style="display:flex; align-items:center; gap:8px; font-weight:600; cursor:pointer;">
+            <input type="checkbox" id="cc-skip-weekends" style="width:auto;"> Skip weekends (Mon–Fri only)
+          </label>
+          <div class="field-hint">For flat-rate daily collection with weekends skipped, 20 collection days count as 1 interest month (40 days = 2 months, 60 days = 3 months). Weekends are not collection days.</div>
+        </div>
+        <div class="field-hint" id="cc-type-hint"></div>
+      </div>
+
+      <div class="card-plain">
+        <div class="section-head"><span class="ic">📊</span> Projection</div>
+        <table class="mini-table">
+          <thead><tr id="cc-schedule-head"><th>Next due</th><th>Interest</th><th>Balance after</th></tr></thead>
+          <tbody id="cc-schedule"></tbody>
+        </table>
+        <div class="statement-row" style="margin-top:10px;"><span>Total interest</span><strong id="cc-total-interest">₱0</strong></div>
+        <div class="statement-row"><span>Total repayable</span><strong id="cc-total-repay">₱0</strong></div>
+      </div>
+    </div>
+  </section>
+
+  <div style="text-align:center; font-size:10px; color:var(--ink-soft); opacity:0.55; padding:10px 0 4px 0;">Build 2026-10-11-8</div>
+</div>
+
+<!-- Add / Edit borrower -->
+<div class="modal-backdrop" id="add-borrower-backdrop">
+  <div class="modal">
+    <h3 id="nb-modal-title">Add borrower</h3>
+    <p class="desc" id="nb-modal-sub">Create a new member account.</p>
+    <div class="field"><label>Full name</label><input type="text" id="nb-name" placeholder="e.g. Juan Dela Cruz"></div>
+    <div class="field"><label>Mobile number</label><input type="tel" id="nb-phone" placeholder="09XX XXX XXXX"></div>
+    <div class="field"><label>Address</label><input type="text" id="nb-address" placeholder="Barangay, city"></div>
+    <div class="field" style="margin-bottom:0;">
+      <label>Branch</label>
+      <select id="nb-branch">
+        <option>Misamis Oriental — Main</option>
+        <option>Bukidnon</option>
+        <option>Camiguin</option>
+        <option>Lanao del Norte</option>
+        <option>Misamis Occidental</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="add-borrower-cancel">Cancel</button>
+      <button class="btn btn-primary" id="add-borrower-save">Save borrower</button>
+    </div>
+  </div>
+</div>
+
+<!-- Borrower statement / print -->
+<div class="modal-backdrop" id="borrower-stmt-backdrop">
+  <div class="modal modal-lg">
+    <div id="borrower-statement">
+      <div id="stmt-loan-blocks"></div>
+    </div>
+    <div class="modal-actions no-print">
+      <button class="btn btn-warn" id="borrower-stmt-delete">Delete</button>
+      <button class="btn btn-ghost" id="borrower-stmt-edit">Edit profile</button>
+      <button class="btn btn-primary" id="borrower-stmt-print">Print account</button>
+    </div>
+    <button class="btn btn-ghost no-print btn-block" id="borrower-stmt-close" style="margin-top:10px;">Close</button>
+  </div>
+</div>
+
+<!-- Add loan -->
+<div class="modal-backdrop" id="add-loan-backdrop">
+  <div class="modal">
+    <h3 id="nl-modal-title">New loan</h3>
+    <p class="desc" id="nl-modal-desc">Set up the loan terms. You can backtrack payments any time after.</p>
+    <div class="field">
+      <label>Borrower</label>
+      <select id="nl-borrower"></select>
+    </div>
+    <div class="field">
+      <label>Purpose</label>
+      <input type="text" id="nl-purpose" placeholder="e.g. Store restock">
+    </div>
+    <div class="field">
+      <label>Loan type</label>
+      <div class="radio-group" id="nl-type">
+        <div class="radio-pill type-pill active" data-val="flat">Flat rate</div>
+        <div class="radio-pill type-pill" data-val="diminishing">Diminishing</div>
+        <div class="radio-pill type-pill" data-val="flexible">Flexible</div>
+      </div>
+      <div class="field-hint" id="nl-type-hint"></div>
+      <div class="field-hint" id="nl-flat-collection-hint">Flat-rate interest is fixed on the original principal for the full term. Borrowers may pay any amount at any time; the full remaining balance is due by maturity. You can assign an early payment to a specific installment. Daily scheduled collections skip weekends when selected.</div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Principal</label><input type="number" id="nl-principal" min="500" step="0.01" placeholder="e.g. 15000"></div>
+      <div class="field"><label>Interest rate (% / month)</label><input type="number" id="nl-rate" min="0.5" max="10" step="0.1" placeholder="Enter rate"></div>
+    </div>
+    <div class="field-row" id="nl-term-row">
+      <div class="field" id="nl-term-wrap"><label>Term (days)</label><input type="number" id="nl-term" min="15" max="365" step="15" placeholder="Enter term"></div>
+      <div class="field"><label>Collection frequency</label>
+        <select id="nl-cycle">
+          <option value="1">Daily</option>
+          <option value="7">Weekly</option>
+          <option value="30" selected>Monthly</option>
+        </select>
+      </div>
+    </div>
+    
+    <div class="field" id="nl-skip-wrap" style="display:none;">
+      <label style="display:flex; align-items:center; gap:8px; font-weight:600; cursor:pointer;">
+        <input type="checkbox" id="nl-skip-weekends" style="width:auto;"> Skip weekends (Mon–Fri only)
+      </label>
+      <div class="field-hint">For flat-rate daily collection with weekends skipped, 20 collection days count as 1 interest month (40 days = 2 months, 60 days = 3 months). Weekends are not collection days.</div>
+    </div>
+    <div class="field-hint" id="nl-term-note" style="display:none; margin-top:-6px; margin-bottom:14px;">This loan type has no fixed term — it stays open until the balance is actually paid off.</div>
+    <div class="field" style="margin-bottom:0;">
+      <label>Disbursed date</label>
+      <input type="date" id="nl-date">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="add-loan-cancel">Cancel</button>
+      <button class="btn btn-primary" id="add-loan-save">Create loan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Backtrack -->
+<div class="modal-backdrop" id="backtrack-backdrop">
+  <div class="modal modal-lg">
+    <h3>🔥 Backtrack loan <span id="bt-loan-id"></span></h3>
+    <p class="desc" id="bt-loan-sub"></p>
+
+    <div class="stat-grid" style="grid-template-columns:repeat(3,1fr); margin-bottom:16px;">
+      <div class="stat-box blue"><div class="lbl">Current balance</div><div class="amt" id="bt-balance" style="font-size:18px;">₱0</div></div>
+      <div class="stat-box mint"><div class="lbl">Interest paid</div><div class="amt" id="bt-interest-paid" style="font-size:18px;">₱0</div></div>
+      <div class="stat-box gold"><div class="lbl">Cycles elapsed</div><div class="amt" id="bt-cycles" style="font-size:18px;">0</div></div>
+    </div>
+
+    <h4 style="font-size:11.5px; text-transform:uppercase; letter-spacing:0.04em; color:var(--ink-soft); font-weight:700; margin:0 0 4px 0;">Ledger</h4>
+    <div class="field-hint" style="margin:0 0 8px 0;">Every disbursement, payment, and cycle's interest outcome, in the order it happened, plus a projected preview of what's coming due next — this is the full record of the loan.</div>
+    <table class="mini-table" style="margin-bottom:16px;">
+      <thead><tr><th>Date</th><th>Entry</th><th>Amount</th><th>Outstanding balance</th><th>Note</th></tr></thead>
+      <tbody id="bt-ledger"></tbody>
+      <tbody id="bt-ledger-upcoming"></tbody>
+    </table>
+
+    <div style="max-width:340px;">
+      <label>Backdate a payment</label>
+      <div class="field-row">
+        <input type="date" id="bt-pay-date">
+        <input type="number" id="bt-pay-amount" min="0" step="0.01" placeholder="Amount (0 if unpaid)">
+      </div>
+      <button class="btn btn-sage btn-sm btn-block" id="bt-add-payment" style="margin-top:8px;">Add payment</button>
+      <div class="field-hint" style="margin-top:8px;">The engine handles everything else automatically — interest, rollovers, and balances recalculate on their own from the payments you log here.</div>
+    </div>
+
+    <button class="btn btn-ghost btn-block" id="backtrack-close" style="margin-top:18px;">Close</button>
+  </div>
+</div>
+
+<!-- Add capital -->
+<div class="modal-backdrop" id="add-capital-backdrop">
+  <div class="modal">
+    <h3 id="ac-modal-title">Add capital</h3>
+    <p class="desc" id="ac-modal-desc">Record new capital invested into the business.</p>
+    <div class="field"><label>Amount</label><input type="number" id="ac-amount" min="1" step="0.01" placeholder="e.g. 50000"></div>
+    <div class="field"><label>Date</label><input type="date" id="ac-date"></div>
+    <div class="field" style="margin-bottom:0;"><label>Note (optional)</label><input type="text" id="ac-note" placeholder="e.g. Additional injection"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="add-capital-cancel">Cancel</button>
+      <button class="btn btn-sage" id="add-capital-save">Add capital</button>
+    </div>
+  </div>
+</div>
+
+<!-- Withdraw funds -->
+<div class="modal-backdrop" id="withdraw-backdrop">
+  <div class="modal">
+    <h3 id="wd-modal-title">Withdraw funds</h3>
+    <p class="desc" id="wd-modal-desc">Record a withdrawal of cash from the business.</p>
+    <div class="field"><label>Amount</label><input type="number" id="wd-amount" min="1" step="0.01" placeholder="e.g. 20000"></div>
+    <div class="field"><label>Date</label><input type="date" id="wd-date"></div>
+    <div class="field" style="margin-bottom:0;"><label>Note (optional)</label><input type="text" id="wd-note" placeholder="e.g. Owner draw"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="withdraw-cancel">Cancel</button>
+      <button class="btn btn-primary" id="withdraw-save">Withdraw</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit payment -->
+<div class="modal-backdrop" id="edit-payment-backdrop">
+  <div class="modal">
+    <h3>Edit payment</h3>
+    <p class="desc" id="ep-loan-label">—</p>
+    <div class="field"><label>Amount</label><input type="number" id="ep-amount" min="0" step="0.01"></div>
+    <div class="field"><label>Date</label><input type="date" id="ep-date"></div>
+    <div class="field" style="margin-bottom:0;"><label>Note (optional)</label><input type="text" id="ep-note"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="edit-payment-cancel">Cancel</button>
+      <button class="btn btn-primary" id="edit-payment-save">Save changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- Capital history -->
+<div class="modal-backdrop" id="capital-history-backdrop">
+  <div class="modal">
+    <h3>Capital history</h3>
+    <p class="desc">Every capital injection on record.</p>
+    <table class="mini-table"><thead><tr><th>Date</th><th>Amount</th><th>Note</th><th></th></tr></thead><tbody id="capital-history-body"></tbody></table>
+    <button class="btn btn-ghost btn-block" id="capital-history-close" style="margin-top:16px;">Close</button>
+  </div>
+</div>
+
+<!-- Withdrawal history -->
+<div class="modal-backdrop" id="withdrawal-history-backdrop">
+  <div class="modal">
+    <h3>Withdrawal history</h3>
+    <p class="desc">Every withdrawal on record.</p>
+    <table class="mini-table"><thead><tr><th>Date</th><th>Amount</th><th>Note</th><th></th></tr></thead><tbody id="withdrawal-history-body"></tbody></table>
+    <button class="btn btn-ghost btn-block" id="withdrawal-history-close" style="margin-top:16px;">Close</button>
+  </div>
+</div>
+
+<!-- Change password -->
+<div class="modal-backdrop" id="password-backdrop">
+  <div class="modal">
+    <h3>Change password</h3>
+    <p class="desc">Sets the password required to open the app on this device. It's stored only in this browser — nothing is sent anywhere. This isn't real encryption, just a casual lock.</p>
+    <div class="field"><label>New password</label><input type="password" id="pw-new" placeholder="At least 4 characters"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="password-cancel">Cancel</button>
+      <button class="btn btn-primary" id="password-save">Save password</button>
+    </div>
+  </div>
+</div>
+
+<!-- Restore confirm -->
+<div class="modal-backdrop" id="restore-backdrop">
+  <div class="modal">
+    <h3>Restore backup</h3>
+    <p class="desc" id="restore-desc">This restores your last in-session backup, replacing current data.</p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="restore-cancel">Cancel</button>
+      <button class="btn btn-primary" id="restore-confirm">Restore</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ======================================================
+     Utilities
+  ====================================================== */
+  const MS_DAY = 86400000;
+  // Escape any data that is inserted into HTML templates. Borrower names, notes,
+  // addresses, and imported JSON must always be treated as untrusted text.
+  function esc(value){
+    return String(value ?? "").replace(/[&<>\"']/g, ch => ({
+      "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+    })[ch]);
+  }
+
+  function peso(n){
+    const v = n||0;
+    return `₱${v.toLocaleString(undefined,{minimumFractionDigits:2, maximumFractionDigits:2})}`;
+  }
+  function pesoWhole(n){
+    return peso(n);
+  }
+  function round2(n){
+    return Math.round((n||0) * 100) / 100;
+  }
+  function toISO(d){
+    if(typeof d === "string") return d;
+    // Use local calendar components, never toISOString() — that converts to UTC first,
+    // which silently shifts the date backward by a day for any positive UTC-offset
+    // timezone (e.g. the Philippines, UTC+8) whenever a Date sits at local midnight.
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,"0");
+    const day = String(d.getDate()).padStart(2,"0");
+    return `${y}-${m}-${day}`;
+  }
+  function fmtDate(d){
+    const dt = typeof d === "string" ? new Date(d+"T00:00:00") : d;
+    return dt.toLocaleDateString("en-US",{month:"short", day:"numeric", year:"numeric"});
+  }
+  function addDays(dateStr, n){
+    const d = new Date(dateStr+"T00:00:00");
+    d.setDate(d.getDate()+n);
+    return d;
+  }
+  function isWeekend(date){
+    const day = date.getDay(); // 0 = Sunday, 6 = Saturday
+    return day === 0 || day === 6;
+  }
+  function addBusinessDays(dateStr, n){
+    const d = new Date(dateStr+"T00:00:00");
+    let counted = 0;
+    while(counted < n){
+      d.setDate(d.getDate()+1);
+      if(!isWeekend(d)) counted++;
+    }
+    return d;
+  }
+  function collectionFrequencyLabel(cycleDays){
+    const days = Number(cycleDays);
+    if(days === 0) return "Flexible (anytime)";
+    if(days === 1) return "Daily";
+    if(days === 7) return "Weekly";
+    if(days === 30) return "Monthly";
+    return `${days}-day`;
+  }
+  function addCycles(dateStr, cycleDays, n, excludeWeekends){
+    // Daily cycles with weekends excluded: count only business days (Mon–Fri), so a
+    // "60-day" term actually spans about 12 calendar weeks instead of 60 straight days.
+    if(cycleDays === 1 && excludeWeekends){
+      return addBusinessDays(dateStr, n);
+    }
+    // Monthly cycles anchor to the same day-of-month each time (e.g. the 7th of every
+    // month) instead of drifting from a flat 30-day add. Daily/weekly cycles are exact
+    // day counts, so they use a plain day add.
+    if(cycleDays === 30){
+      const d = new Date(dateStr+"T00:00:00");
+      const day = d.getDate();
+      const target = new Date(d.getFullYear(), d.getMonth()+n, 1);
+      const daysInTargetMonth = new Date(target.getFullYear(), target.getMonth()+1, 0).getDate();
+      target.setDate(Math.min(day, daysInTargetMonth));
+      return target;
+    }
+    return addDays(dateStr, n*cycleDays);
+  }
+  function daysBetween(dateStr, other){
+    const d1 = new Date(dateStr+"T00:00:00");
+    const d2 = other instanceof Date ? other : new Date(other+"T00:00:00");
+    return Math.floor((d2 - d1) / MS_DAY);
+  }
+  function today(){
+    return new Date();
+  }
+  function todayISO(){
+    return toISO(today());
+  }
+  let toastTimer;
+  function toast(msg){
+    const el = document.getElementById("toast");
+    el.textContent = msg;
+    el.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(()=>el.classList.remove("show"), 2800);
+  }
+  function initials(name){
+    return name.split(" ").map(w=>w[0]).filter(Boolean).join("").slice(0,2).toUpperCase();
+  }
+
+  /* ======================================================
+     Data model
+  ====================================================== */
+  let borrowerSeq = 100;
+  let loanSeq = 0;
+
+  let business = {
+    capitalLog:[],
+    withdrawalLog:[],
+    backupSnapshot:null,
+  };
+
+  let borrowers = [];
+
+  // helper to build a disbursed date N days before today
+  function daysAgo(n){ return toISO(new Date(Date.now() - n*MS_DAY)); }
+
+  let loans = [];
+
+  /* ======================================================
+     Loan math engine — flat / diminishing / flexible
+  ====================================================== */
+  // Flat-rate loans accrue interest monthly, independently of how often the borrower pays.
+  // Daily collections are business-day only; weekly and monthly collections use calendar dates.
+  function flatInstallmentDates(loan){
+    const start = loan.disbursedDate;
+    const frequency = Number(loan.cycleDays);
+    const termDays = Math.max(1, Number(loan.term) || 30);
+    // For weekday-only daily flat loans, the term is measured in collection days,
+    // not calendar days. This makes 20 business-day collections equal one interest month.
+    const end = frequency === 1 && loan.excludeWeekends
+      ? addBusinessDays(start, termDays)
+      : addDays(start, termDays);
+    const dates = [];
+    if(frequency === 0){
+      // Flexible collection has no interim scheduled installments; the full balance is due at maturity.
+      return [toISO(end)];
+    }
+    if(frequency === 1){
+      let d = new Date(start + "T00:00:00");
+      while(d < end){
+        d.setDate(d.getDate()+1);
+        if(d <= end && !isWeekend(d)) dates.push(toISO(d));
+        if(dates.length > 1000) break;
+      }
+    } else {
+      let i = 1;
+      while(i <= 500){
+        const d = addCycles(start, frequency, i, false);
+        if(d > end) break;
+        // Flat-rate installments are never scheduled on Saturday or Sunday.
+        while(isWeekend(d)) d.setDate(d.getDate()+1);
+        dates.push(toISO(d));
+        i++;
+      }
+    }
+    if(!dates.length) dates.push(toISO(end));
+    return dates;
+  }
+  function flatInterestMonths(term, cycleDays, excludeWeekends){
+    // Daily weekday-only flat loans use a 20-business-day interest month.
+    // Other flat terms retain the existing 30-day month convention.
+    const daysPerInterestMonth = Number(cycleDays) === 1 && excludeWeekends ? 20 : 30;
+    return Math.max(1, Math.ceil(Number(term || daysPerInterestMonth) / daysPerInterestMonth));
+  }
+  function totalCyclesFor(loan){
+    if(!loan.term) return null; // open-ended (flexible with no fixed term)
+    if(loan.type === "flat") return flatInstallmentDates(loan).length;
+    return Math.max(1, Math.ceil(loan.term / loan.cycleDays));
+  }
+  function cyclesElapsedFor(loan, asOf){
+    const ref = asOf || today();
+    if(loan.type === "flat") return flatInstallmentDates(loan).filter(d=>new Date(d+"T00:00:00") <= ref).length;
+    const totalCycles = totalCyclesFor(loan);
+    let n = 0;
+    while(true){
+      if(totalCycles && n >= totalCycles) break;
+      const due = addCycles(loan.disbursedDate, loan.cycleDays, n+1, loan.excludeWeekends);
+      if(due > ref) break;
+      n++;
+      if(n > 5000) break;
+    }
+    return n;
+  }
+
+  // Which cycle a given date falls into — used to stop two payments being logged for the
+  // same due cycle (e.g. two separate entries both meant for "the April payment").
+  function cycleIndexForDate(loan, dateStr){
+    if(loan.type === "flat"){
+      const dates = flatInstallmentDates(loan);
+      const idx = dates.findIndex(d=>dateStr <= d);
+      return idx < 0 ? dates.length : idx + 1;
+    }
+    let n = 1;
+    while(true){
+      const boundary = toISO(addCycles(loan.disbursedDate, loan.cycleDays, n, loan.excludeWeekends));
+      if(dateStr <= boundary) return n;
+      n++;
+      if(n > 5000) return n;
+    }
+  }
+  function findDuplicateCyclePayment(loan, dateStr, excludeIndex){
+    const targetCycle = cycleIndexForDate(loan, dateStr);
+    return loan.ledger.find((e,idx)=>
+      e.type === "payment" && idx !== excludeIndex && cycleIndexForDate(loan, e.date) === targetCycle
+    );
+  }
+
+  function computeLoanState(loan, asOf){
+    const asOfBoundary = toISO(asOf || today());
+    const totalPaid = loan.ledger
+      .filter(e=>e.type==="payment" && e.date <= asOfBoundary)
+      .reduce((s,e)=>s+e.amount,0);
+    const totalCycles = totalCyclesFor(loan); // null = open-ended
+    const cyclesElapsed = cyclesElapsedFor(loan, asOf);
+
+    let schedule = [];
+    let balance = 0, interestPaid = 0, principalPaid = 0, totalInterest = 0, principalBase = null;
+    let manualOverride = null;
+
+    if(loan.type === "flat"){
+      const installmentDates = flatInstallmentDates(loan);
+      const interestMonths = flatInterestMonths(loan.term, loan.cycleDays, loan.excludeWeekends);
+      totalInterest = loan.principal * (loan.rate/100) * interestMonths;
+      const totalOwed = loan.principal + totalInterest;
+      interestPaid = Math.min(totalPaid, totalInterest);
+      principalPaid = Math.min(Math.max(0, totalPaid - interestPaid), loan.principal);
+      balance = Math.max(0, totalOwed - totalPaid);
+      const perCycleInterest = totalInterest / totalCycles;
+      const perCyclePrincipal = loan.principal / totalCycles;
+      const perCycleTotal = perCyclePrincipal + perCycleInterest;
+      let prevBoundary = toISO(addDays(loan.disbursedDate, -1)); // includes the disbursement date
+      for(let i=1;i<=cyclesElapsed;i++){
+        const cycleDate = installmentDates[i-1];
+        const paymentsThisCycle = loan.ledger
+          .filter(e=>e.type==="payment" && e.date <= asOfBoundary && (
+            e.installmentDate ? e.installmentDate === cycleDate : (e.date > prevBoundary && e.date <= cycleDate)
+          ))
+          .reduce((s,e)=>s+e.amount, 0);
+        schedule.push({
+          cycle:i,
+          date:cycleDate,
+          principal:perCyclePrincipal,
+          interest:perCycleInterest,
+          totalDue:perCycleTotal,
+          unpaid:Math.max(0, perCycleTotal - paymentsThisCycle),
+          rolled:0,
+          balanceAfter:Math.max(0, loan.principal - perCyclePrincipal*i)
+        });
+        prevBoundary = cycleDate;
+      }
+      const flatAdjustments = loan.ledger.filter(e=>e.type==="adjustment" && e.date <= asOfBoundary).sort((a,b)=>a.date.localeCompare(b.date));
+      if(flatAdjustments.length){
+        manualOverride = flatAdjustments[flatAdjustments.length-1];
+        balance = manualOverride.amount;
+      }
+    } else {
+      // Diminishing or flexible — a chronological, date-anchored simulation.
+      // A payment or adjustment only affects the cycle it actually falls in, and everything
+      // after it. Cycles that already completed before that date never get rewritten.
+      const isFlexible = loan.type === "flexible";
+      let bal = loan.principal;
+      let arrears = 0; // unpaid interest that does NOT compound (diminishing only)
+      let prevBoundary = toISO(addDays(loan.disbursedDate, -1)); // inclusive of the disbursement date itself
+
+      for(let i=1;i<=cyclesElapsed;i++){
+        const cycleDate = toISO(addCycles(loan.disbursedDate, loan.cycleDays, i, loan.excludeWeekends));
+        const interest = bal * (loan.rate/100);
+        totalInterest += interest;
+
+        const paymentsThisCycle = loan.ledger
+          .filter(e=>e.type==="payment" && e.date > prevBoundary && e.date <= cycleDate && e.date <= asOfBoundary)
+          .reduce((s,e)=>s+e.amount, 0);
+
+        let pool = paymentsThisCycle;
+        const appliedToArrears = isFlexible ? 0 : Math.min(arrears, pool);
+        arrears -= appliedToArrears; pool -= appliedToArrears;
+
+        const appliedInt = Math.min(interest, pool);
+        interestPaid += appliedInt; pool -= appliedInt;
+        const unpaid = interest - appliedInt;
+
+        let rolled = 0;
+        if(isFlexible){
+          if(unpaid > 0.005){ bal += unpaid; rolled = unpaid; }
+        } else {
+          arrears += Math.max(0, unpaid);
+        }
+
+        const appliedPrin = Math.min(bal, pool);
+        principalPaid += Math.min(appliedPrin, loan.principal - Math.min(principalPaid, loan.principal));
+        bal -= appliedPrin;
+
+        // an adjustment dated within this cycle's window overrides the balance right here —
+        // it never reaches back into earlier, already-completed cycles.
+        const adjInWindow = loan.ledger
+          .filter(e=>e.type==="adjustment" && e.date > prevBoundary && e.date <= cycleDate && e.date <= asOfBoundary)
+          .sort((a,b)=>a.date.localeCompare(b.date));
+        if(adjInWindow.length){
+          bal = adjInWindow[adjInWindow.length-1].amount;
+          arrears = 0;
+          manualOverride = adjInWindow[adjInWindow.length-1];
+        }
+
+        schedule.push({cycle:i, date:cycleDate, interest, unpaid:Math.max(0,unpaid), rolled, balanceAfter:Math.max(0,bal)+arrears});
+        prevBoundary = cycleDate;
+      }
+
+      // payments/adjustments dated after the last completed cycle, up to today
+      const asOfISO = asOfBoundary;
+      const trailingPayments = loan.ledger
+        .filter(e=>e.type==="payment" && e.date > prevBoundary && e.date <= asOfISO)
+        .reduce((s,e)=>s+e.amount, 0);
+      if(trailingPayments > 0){
+        let pool = trailingPayments;
+        const appliedToArrears = isFlexible ? 0 : Math.min(arrears, pool);
+        arrears -= appliedToArrears; pool -= appliedToArrears;
+        const appliedPrin = Math.min(bal, pool);
+        principalPaid += Math.min(appliedPrin, loan.principal - Math.min(principalPaid, loan.principal));
+        bal -= appliedPrin;
+      }
+      const trailingAdj = loan.ledger
+        .filter(e=>e.type==="adjustment" && e.date > prevBoundary && e.date <= asOfISO)
+        .sort((a,b)=>a.date.localeCompare(b.date));
+      if(trailingAdj.length){
+        bal = trailingAdj[trailingAdj.length-1].amount;
+        arrears = 0;
+        manualOverride = trailingAdj[trailingAdj.length-1];
+      }
+
+      balance = Math.max(0, bal) + arrears;
+      principalBase = Math.max(0, bal);
+    }
+
+    let dueDate, isOverdue, daysLate;
+    if(loan.term){
+      // fixed-term loan: overdue once the whole term has passed with a balance remaining
+      dueDate = addDays(loan.disbursedDate, loan.term);
+      isOverdue = balance > 0.5 && dueDate < today();
+      daysLate = isOverdue ? Math.max(0, daysBetween(toISO(dueDate), today())) : 0;
+    } else {
+      // open-ended (diminishing or flexible with no fixed term): "due" tracks the next cycle boundary
+      dueDate = addCycles(loan.disbursedDate, loan.cycleDays, cyclesElapsed+1, loan.excludeWeekends);
+      const lastCycle = schedule[schedule.length-1];
+      isOverdue = balance > 0.5 && !!lastCycle && lastCycle.unpaid > 0.5;
+      daysLate = isOverdue ? Math.max(0, daysBetween(toISO(addCycles(loan.disbursedDate, loan.cycleDays, cyclesElapsed, loan.excludeWeekends)), today())) : 0;
+    }
+
+    return {
+      balance: round2(balance),
+      interestPaid: round2(interestPaid),
+      principalPaid: round2(principalPaid),
+      totalInterest: round2(totalInterest),
+      totalPaid, cyclesElapsed, totalCycles, schedule, manualOverride, principalBase,
+      dueDate, isOverdue, daysLate,
+      status: balance <= 0.5 ? "paid" : (isOverdue ? "overdue" : (daysBetween(todayISO(), toISO(dueDate)) <= 3 ? "due" : "on-track")),
+    };
+  }
+
+  // Isolates one specific payment's effect — how much of it went to interest vs. capital,
+  // and the balance right after — by comparing the loan's state with and without that
+  // single ledger entry. This stays accurate even when several payments share a date.
+  //
+  // Both the interest/capital split AND the balance are anchored to the END of the
+  // payment's own cycle (not "today" and not the raw payment date), so they're a stable,
+  // internally-consistent fact about the loan. A payment dated a day or two before its
+  // cycle's actual boundary would otherwise show a "balance after" that hasn't caught up
+  // with that cycle's own interest yet — which is exactly what caused the mismatch between
+  // a ledger row and the loan's real current balance.
+  function computePaymentImpact(loan, entryIndex){
+    const entry = loan.ledger[entryIndex];
+    const cycleNum = cycleIndexForDate(loan, entry.date);
+    const cycleBoundary = addCycles(loan.disbursedDate, loan.cycleDays, cycleNum, loan.excludeWeekends);
+    // Settle as of whichever comes first: this payment's cycle boundary, or today. That
+    // way a cycle that has genuinely already elapsed always gets its final, settled state
+    // (matching the loan's overall totals), but a cycle that hasn't happened yet in real
+    // time is left as a provisional read — which is honest, since its interest isn't final.
+    const settledAsOf = toISO(cycleBoundary) < todayISO() ? cycleBoundary : today();
+
+    const loanWithout = {...loan, ledger: loan.ledger.filter((e,i)=>i!==entryIndex)};
+    const withSettled = computeLoanState(loan, settledAsOf);
+    const withoutSettled = computeLoanState(loanWithout, settledAsOf);
+
+    return {
+      interestApplied: Math.max(0, withSettled.interestPaid - withoutSettled.interestPaid),
+      capitalApplied: Math.max(0, withSettled.principalPaid - withoutSettled.principalPaid),
+      balanceAfter: withSettled.balance,
+    };
+  }
+
+  function statusLabel(st){
+    if(st.status === "paid") return "Fully paid";
+    if(st.status === "overdue") return `${st.daysLate} days late`;
+    if(st.status === "due") return "Due soon";
+    return "On track";
+  }
+
+  function typeLabel(t){
+    return t === "flat" ? "Flat rate" : t === "diminishing" ? "Diminishing" : "Flexible";
+  }
+  function typeHint(t){
+    if(t === "flat") return "Fixed interest is calculated from the original principal for the full agreed term. The borrower may pay any amount at any time, but must clear the remaining balance by the maturity date.";
+    if(t === "diminishing") return "Interest is charged on the remaining balance each cycle, so it shrinks as the principal is paid down. There's no fixed term — it runs until the actual payments clear it, and unpaid interest does not compound.";
+    return "Compounding, open-ended: any unpaid interest at the end of a cycle rolls into the principal and earns interest going forward. There's no fixed term — it runs until the actual payments clear it.";
+  }
+
+  /* ======================================================
+     Aggregates
+  ====================================================== */
+  function totalCapital(){ return business.capitalLog.reduce((s,c)=>s+c.amount,0); }
+  function totalWithdrawn(){ return business.withdrawalLog.reduce((s,w)=>s+w.amount,0); }
+
+  function aggregate(){
+    let totalLent=0, totalOutstanding=0, totalCollected=0, totalInterestPaid=0, totalPrincipalPaid=0, overdueCount=0;
+    loans.forEach(loan=>{
+      const st = computeLoanState(loan);
+      totalLent += loan.principal;
+      totalOutstanding += st.balance;
+      totalCollected += st.totalPaid;
+      totalInterestPaid += st.interestPaid;
+      totalPrincipalPaid += st.principalPaid;
+      if(st.status === "overdue") overdueCount++;
+    });
+    const capitalDeployed = Math.max(0, totalLent - totalPrincipalPaid);
+    const capital = totalCapital();
+    const cashAvailable = capital - totalLent + totalCollected - totalWithdrawn();
+    const profitEarned = totalInterestPaid;
+    return {totalLent, totalOutstanding, totalCollected, capitalDeployed, cashAvailable, profitEarned, overdueCount, capital};
+  }
+
+  function borrowerById(id){ return borrowers.find(b=>b.id===id); }
+  function loanById(id){ return loans.find(l=>l.loanId===id); }
+
+  /* ======================================================
+     Navigation
+  ====================================================== */
+  const pages = [
+    {id:"dashboard", label:"Dashboard", ic:"🌱"},
+    {id:"borrowers", label:"Borrowers", ic:"👥"},
+    {id:"loans", label:"Loans", ic:"📄"},
+    {id:"payments", label:"Payments", ic:"💳"},
+    {id:"cashflow", label:"Cash Flow", ic:"📈"},
+    {id:"summary", label:"Summary", ic:"📋"},
+    {id:"calculator", label:"Calculator", ic:"🧮"},
+  ];
+  const tabsEl = document.getElementById("tabs");
+  pages.forEach(p=>{
+    const b = document.createElement("button");
+    b.className = "tab-btn" + (p.id==="dashboard" ? " active" : "");
+    b.dataset.nav = p.id;
+    b.innerHTML = `<span class="ic">${p.ic}</span><span>${p.label}</span>`;
+    tabsEl.appendChild(b);
+  });
+
+  function goTo(id){
+    document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
+    document.getElementById("view-"+id).classList.add("active");
+    document.querySelectorAll(".tab-btn").forEach(t=>t.classList.toggle("active", t.dataset.nav===id));
+    window.scrollTo({top:0, behavior:"instant"});
+    renderAll();
+  }
+  document.body.addEventListener("click",(e)=>{
+    const t = e.target.closest("[data-nav]");
+    if(t){ goTo(t.dataset.nav); }
+  });
+
+  /* ======================================================
+     Render: Dashboard
+  ====================================================== */
+  function renderDashboard(){
+    const ag = aggregate();
+    document.getElementById("st-capital").textContent = peso(ag.capital);
+    document.getElementById("st-deployed").textContent = peso(ag.capitalDeployed);
+    document.getElementById("st-cash").textContent = peso(ag.cashAvailable);
+    document.getElementById("st-profit").textContent = peso(ag.profitEarned);
+    document.getElementById("st-outstanding").textContent = peso(ag.totalOutstanding);
+    document.getElementById("st-lent").textContent = peso(ag.totalLent);
+    document.getElementById("st-overdue").textContent = ag.overdueCount;
+    document.getElementById("st-collected").textContent = peso(ag.totalCollected);
+
+    // upcoming (due within next 7 days, not yet overdue)
+    const upcoming = [];
+    loans.forEach(loan=>{
+      const st = computeLoanState(loan);
+      if(st.balance <= 0.5) return;
+      const daysUntilDue = daysBetween(todayISO(), toISO(st.dueDate));
+      if(daysUntilDue >= 0 && daysUntilDue <= 7){
+        const b = borrowerById(loan.borrowerId);
+        upcoming.push({loan, st, borrower:b, daysUntilDue});
+      }
+    });
+    upcoming.sort((a,b)=>a.daysUntilDue-b.daysUntilDue);
+    const upEl = document.getElementById("db-upcoming");
+    upEl.innerHTML = upcoming.length ? upcoming.map(u=>`
+      <div class="list-row">
+        <div>
+          <div class="row-title">${esc(u.borrower ? u.borrower.name : "—")}</div>
+          <div class="row-sub">${esc(u.loan.loanId)} · ${peso(u.st.balance)} due · ${u.daysUntilDue===0?"Today":u.daysUntilDue+" day"+(u.daysUntilDue===1?"":"s")}</div>
+        </div>
+        <span class="tag due">Due soon</span>
+      </div>`).join("") : `<div class="empty-note">No upcoming dues — nice and tidy!</div>`;
+
+    // needs follow-up (overdue)
+    const followup = [];
+    loans.forEach(loan=>{
+      const st = computeLoanState(loan);
+      if(st.status === "overdue"){
+        const b = borrowerById(loan.borrowerId);
+        followup.push({loan, st, borrower:b});
+      }
+    });
+    followup.sort((a,b)=>b.st.daysLate - a.st.daysLate);
+    const fuEl = document.getElementById("db-followup");
+    fuEl.innerHTML = followup.length ? followup.map(f=>`
+      <div class="list-row">
+        <div>
+          <div class="row-title">${esc(f.borrower ? f.borrower.name : "—")}</div>
+          <div class="row-sub">${esc(f.loan.loanId)} · ${peso(f.st.balance)} due · ${f.st.daysLate} days late</div>
+        </div>
+        <button class="follow-btn" data-nav="borrowers">📞 Follow up</button>
+      </div>`).join("") : `<div class="empty-note">Nothing needs follow-up right now.</div>`;
+  }
+
+  /* ======================================================
+     Render: Borrowers
+  ====================================================== */
+  function renderBorrowers(){
+    const el = document.getElementById("borrowers-list");
+    if(!borrowers.length){
+      el.innerHTML = `<div class="empty-state">No borrower accounts yet. Add one to get started.</div>`;
+    } else {
+      el.innerHTML = borrowers.map((b,i)=>{
+        const bLoans = loans.filter(l=>l.borrowerId===b.id);
+        const states = bLoans.map(l=>computeLoanState(l));
+        const outstanding = states.reduce((s,st)=>s+st.balance,0);
+        const worst = states.some(st=>st.status==="overdue") ? "overdue"
+          : states.some(st=>st.status==="due") ? "due"
+          : states.every(st=>st.status==="paid") && states.length ? "paid"
+          : states.length ? "on-track" : "pending";
+        const worstLabel = worst==="overdue" ? "Overdue" : worst==="due" ? "Due soon" : worst==="paid" ? "Fully paid" : worst==="pending" ? "No loans" : "On track";
+        return `
+        <div class="list-row" style="cursor:pointer;" data-borrower-index="${i}">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:34px;height:34px;border-radius:50%;background:var(--lavender-bg);color:var(--lavender-ink);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;">${esc(initials(b.name))}</div>
+            <div>
+              <div class="row-title">${esc(b.name)}</div>
+              <div class="row-sub">${esc(b.id)} · ${esc(b.branch)}</div>
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <div class="row-amount">${outstanding>0 ? peso(outstanding)+" left" : "No balance"}</div>
+            <span class="tag ${esc(worst)}">${worstLabel}</span>
+          </div>
+        </div>`;
+      }).join("");
+      el.querySelectorAll("[data-borrower-index]").forEach(row=>{
+        row.addEventListener("click", ()=>openBorrowerStatement(parseInt(row.dataset.borrowerIndex,10)));
+      });
+    }
+    populateSelect("nl-borrower", borrowers.map(b=>({value:b.id, label:`${b.name} — ${b.id}`})), "Select borrower");
+  }
+
+  function populateSelect(id, options, placeholder){
+    const sel = document.getElementById(id);
+    if(!sel) return;
+    const current = sel.value;
+    sel.innerHTML = (placeholder ? `<option value="">${placeholder}</option>` : "") +
+      options.map(o=>`<option value="${esc(o.value)}">${esc(o.label)}</option>`).join("");
+    if(current && options.some(o=>o.value===current)) sel.value = current;
+  }
+
+  /* ======================================================
+     Render: Loans
+  ====================================================== */
+  function renderLoans(){
+    const el = document.getElementById("loans-list");
+    if(!loans.length){
+      el.innerHTML = `<div class="empty-state">No loans yet.</div>`;
+    } else {
+      const sorted = [...loans].sort((a,b)=>a.loanId.localeCompare(b.loanId));
+      el.innerHTML = sorted.map(loan=>{
+        const b = borrowerById(loan.borrowerId);
+        const st = computeLoanState(loan);
+        return `
+        <div class="list-row">
+          <div>
+            <div class="row-title">${esc(loan.loanId)} · ${esc(b ? b.name : "—")}</div>
+            <div class="row-sub">${esc(loan.purpose)} · ${peso(loan.principal)} · <span class="tag ${esc(loan.type)}" style="margin-left:2px;">${typeLabel(loan.type)}</span></div>
+          </div>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <div style="text-align:right; margin-right:4px;">
+              <div class="row-amount">${peso(st.balance)}</div>
+              <span class="tag ${esc(st.status)}">${statusLabel(st)}</span>
+            </div>
+            <button class="fire-btn" title="Backtrack this loan" data-backtrack="${esc(loan.loanId)}">🔥</button>
+            <button class="fire-btn" title="Print loan agreement" data-loan-agreement="${esc(loan.loanId)}">📝</button>
+            <button class="fire-btn" title="Edit loan" data-loan-edit="${esc(loan.loanId)}">✏️</button>
+            <button class="fire-btn" title="Delete loan" data-loan-delete="${esc(loan.loanId)}">🗑️</button>
+          </div>
+        </div>`;
+      }).join("");
+      el.querySelectorAll("[data-backtrack]").forEach(btn=>{
+        btn.addEventListener("click", (e)=>{ e.stopPropagation(); openBacktrack(btn.dataset.backtrack); });
+      });
+      el.querySelectorAll("[data-loan-agreement]").forEach(btn=>{
+        btn.addEventListener("click", (e)=>{ e.stopPropagation(); printLoanAgreement(btn.dataset.loanAgreement); });
+      });
+      el.querySelectorAll("[data-loan-edit]").forEach(btn=>{
+        btn.addEventListener("click", (e)=>{ e.stopPropagation(); openLoanForm(btn.dataset.loanEdit); });
+      });
+      el.querySelectorAll("[data-loan-delete]").forEach(btn=>{
+        btn.addEventListener("click", (e)=>{
+          e.stopPropagation();
+          const loan = loanById(btn.dataset.loanDelete);
+          if(!loan) return;
+          const b = borrowerById(loan.borrowerId);
+          const hasPayments = loan.ledger.some(x=>x.type==="payment");
+          const msg = hasPayments
+            ? `Delete ${loan.loanId} (${b?b.name:"—"})? This loan has recorded payments — deleting it removes that history too. This can't be undone.`
+            : `Delete ${loan.loanId} (${b?b.name:"—"})? This can't be undone.`;
+          if(!window.confirm(msg)) return;
+          loans = loans.filter(l=>l.loanId !== loan.loanId);
+          toast(`${loan.loanId} deleted`);
+          renderAll();
+        });
+      });
+    }
+    populateSelect("pay-loan", loans.map(l=>{
+      const b = borrowerById(l.borrowerId);
+      return {value:l.loanId, label:`${esc(l.loanId)} — ${esc(b?b.name:"—")} (${peso(computeLoanState(l).balance)} due)`};
+    }), "Select a loan");
+    updatePayInstallments();
+    updatePayPreview();
+  }
+
+  function updatePayInstallments(){
+    const select = document.getElementById("pay-installment");
+    if(!select) return;
+    const loan = loanById(document.getElementById("pay-loan").value);
+    const current = select.value;
+    if(!loan || loan.type !== "flat"){
+      select.innerHTML = '<option value="">Automatic by payment date</option>';
+      return;
+    }
+    const dates = flatInstallmentDates(loan);
+    const state = computeLoanState(loan);
+    const paidByDate = {};
+    loan.ledger.filter(e=>e.type === "payment").forEach(e=>{
+      if(e.installmentDate) paidByDate[e.installmentDate] = (paidByDate[e.installmentDate] || 0) + e.amount;
+      else {
+        const idx = dates.findIndex(d=>e.date <= d);
+        if(idx >= 0) paidByDate[dates[idx]] = (paidByDate[dates[idx]] || 0) + e.amount;
+      }
+    });
+    const totalPer = (loan.principal + loan.principal * (loan.rate/100) * flatInterestMonths(loan.term, loan.cycleDays, loan.excludeWeekends)) / Math.max(1, dates.length);
+    select.innerHTML = '<option value="">Automatic by payment date</option>' + dates.map((d,i)=>{
+      const remaining = Math.max(0, totalPer - (paidByDate[d] || 0));
+      return `<option value="${d}">Installment ${i+1} — ${fmtDate(d)} — ${peso(remaining)} remaining</option>`;
+    }).join("");
+    if(current && dates.includes(current)) select.value = current;
+  }
+
+  function printLoanAgreement(loanId){
+    const loan = loanById(loanId);
+    if(!loan) return;
+    const borrower = borrowerById(loan.borrowerId) || {};
+    const maturity = loan.type === "flat" ? flatInstallmentDates(loan).slice(-1)[0] : null;
+    const interest = loan.type === "flat" ? loan.principal * (loan.rate/100) * flatInterestMonths(loan.term, loan.cycleDays, loan.excludeWeekends) : null;
+    const totalDue = loan.type === "flat" ? loan.principal + interest : null;
+    const escHtml = v => esc(String(v == null ? "" : v));
+    const doc = `<!doctype html><html><head><meta charset="utf-8"><title>Loan Agreement ${escHtml(loan.loanId)}</title><style>body{font:14px Arial,sans-serif;color:#222;max-width:800px;margin:35px auto;line-height:1.55}h1{text-align:center;font-size:22px}h2{font-size:16px;margin-top:24px}table{width:100%;border-collapse:collapse}td{padding:8px;border-bottom:1px solid #ddd}td:first-child{font-weight:bold;width:38%}.sign{display:flex;gap:50px;margin-top:70px}.sign div{flex:1;border-top:1px solid #333;padding-top:8px;text-align:center}.muted{color:#555;font-size:12px}@media print{button{display:none}body{margin:15mm}}</style></head><body><h1>LOAN AGREEMENT</h1><p>This Loan Agreement is made on __________________ between the following parties:</p><p><b>LENDER:</b> TD Microfinance Business, represented by ______________________________</p><p><b>BORROWER:</b> ${escHtml(borrower.name || "________________")}, of ${escHtml(borrower.address || "________________")}, mobile ${escHtml(borrower.phone || "________________")}.</p><h2>1. Loan Details</h2><table><tr><td>Loan reference</td><td>${escHtml(loan.loanId)}</td></tr><tr><td>Purpose</td><td>${escHtml(loan.purpose || "General purpose")}</td></tr><tr><td>Principal</td><td>${peso(loan.principal)}</td></tr><tr><td>Interest terms</td><td>${loan.type === "flat" ? `Fixed flat interest at ${loan.rate}% per month, calculated on original principal for the full agreed term.` : `${escHtml(typeLabel(loan.type))} loan at ${loan.rate}% per ${loan.cycleDays}-day cycle.`}</td></tr><tr><td>Agreed term</td><td>${loan.term ? `${loan.term} days` : "Open-ended"}</td></tr><tr><td>Disbursement date</td><td>${fmtDate(loan.disbursedDate)}</td></tr><tr><td>Final due date</td><td>${maturity ? fmtDate(maturity) : "Not fixed"}</td></tr>${totalDue !== null ? `<tr><td>Fixed total interest</td><td>${peso(interest)}</td></tr><tr><td><b>Total amount due</b></td><td><b>${peso(totalDue)}</b></td></tr>` : ""}</table><h2>2. Payment Terms</h2><p>For this fixed-term flat-rate loan, the borrower may make payments at any time and in any amount. Each payment will be credited to the outstanding amount due. The agreed flat interest remains fixed for the full term and is not recalculated because of partial or early payments. The entire outstanding balance must be paid on or before the final due date shown above.</p><p>Payments will be recorded by the lender, and the borrower may request a receipt or account statement. Any unpaid balance after the final due date remains payable, subject to applicable law and the terms legally agreed by the parties.</p><h2>3. Agreement</h2><p>Both parties confirm that they have read and understood the loan amount, interest, payment terms, and maturity date stated in this agreement, and agree to these terms voluntarily.</p><div class="sign"><div>Lender signature<br><br>Name: __________________</div><div>Borrower signature<br><br>Name: ${escHtml(borrower.name || "________________")}</div></div><div class="sign"><div>Witness signature<br><br>Name: __________________</div><div>Date signed<br><br>__________________</div></div><p class="muted">Template for review. Have this agreement checked for compliance with applicable Philippine laws before official use.</p><button onclick="window.print()">Print agreement</button></body></html>`;
+    const win = window.open("", "_blank");
+    if(!win){ toast("Please allow pop-ups to print the loan agreement"); return; }
+    win.document.open(); win.document.write(doc); win.document.close();
+  }
+
+  /* ======================================================
+     Render: Payments
+  ====================================================== */
+  function renderPayments(){
+    const rows = [];
+    loans.forEach(loan=>{
+      const b = borrowerById(loan.borrowerId);
+      loan.ledger.forEach((e,idx)=>{
+        if(e.type!=="payment") return;
+        rows.push({date:e.date, loanId:loan.loanId, borrower: b?b.name:"—", amount:e.amount, note:e.note, installmentDate:e.installmentDate, ledgerIndex:idx});
+      });
+    });
+    rows.sort((a,b)=>b.date.localeCompare(a.date));
+    const el = document.getElementById("payments-list");
+    el.innerHTML = rows.length ? rows.slice(0,25).map(r=>`
+      <div class="list-row">
+        <div>
+          <div class="row-title">${esc(r.borrower)}</div>
+          <div class="row-sub">${esc(r.loanId)} · ${fmtDate(r.date)}${r.installmentDate ? " · Applied to installment due "+fmtDate(r.installmentDate) : ""}${r.note ? " · "+esc(r.note) : ""}</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <div class="row-amount">${peso(r.amount)}</div>
+          <button class="fire-btn" title="Edit payment" data-pay-edit="${esc(r.loanId)}|${r.ledgerIndex}">✏️</button>
+          <button class="fire-btn" title="Delete payment" data-pay-delete="${esc(r.loanId)}|${r.ledgerIndex}">🗑️</button>
+        </div>
+      </div>`).join("") : `<div class="empty-note">No payments recorded yet.</div>`;
+
+    el.querySelectorAll("[data-pay-edit]").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const [loanId, idx] = btn.dataset.payEdit.split("|");
+        openEditPayment(loanId, parseInt(idx,10));
+      });
+    });
+    el.querySelectorAll("[data-pay-delete]").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const [loanId, idx] = btn.dataset.payDelete.split("|");
+        const loan = loanById(loanId);
+        const entry = loan.ledger[parseInt(idx,10)];
+        if(!window.confirm(`Delete this payment of ${peso(entry.amount)} on ${fmtDate(entry.date)}?`)) return;
+        loan.ledger.splice(parseInt(idx,10),1);
+        toast("Payment deleted");
+        renderAll();
+      });
+    });
+  }
+
+  let editingPayment = null; // {loanId, index}
+  function openEditPayment(loanId, index){
+    const loan = loanById(loanId);
+    const entry = loan.ledger[index];
+    if(!entry) return;
+    editingPayment = {loanId, index};
+    document.getElementById("ep-amount").value = entry.amount;
+    document.getElementById("ep-date").value = entry.date;
+    document.getElementById("ep-note").value = entry.note || "";
+    document.getElementById("ep-loan-label").textContent = `${loan.loanId} — ${(borrowerById(loan.borrowerId)||{}).name || "—"}`;
+    document.getElementById("edit-payment-backdrop").classList.add("show");
+  }
+
+  function updatePayPreview(){
+    const loanSel = document.getElementById("pay-loan");
+    const preview = document.getElementById("pay-preview");
+    const loan = loanById(loanSel.value);
+    if(!loan){ preview.textContent = ""; return; }
+    const st = computeLoanState(loan);
+    const cycleText = st.totalCycles ? `cycle ${st.cyclesElapsed} of ${st.totalCycles}` : `cycle ${st.cyclesElapsed} (ongoing)`;
+    preview.textContent = `Current balance: ${peso(st.balance)} · ${typeLabel(loan.type)} loan · ${cycleText}`;
+  }
+
+  /* ======================================================
+     Render: Cash flow
+  ====================================================== */
+  function renderCashflow(){
+    let events = [];
+    business.capitalLog.forEach(c=>events.push({date:c.date, type:"Capital", detail:c.note||"Capital injection", amount:c.amount}));
+    business.withdrawalLog.forEach(w=>events.push({date:w.date, type:"Withdrawal", detail:w.note||"Withdrawal", amount:-w.amount}));
+    loans.forEach(loan=>{
+      const b = borrowerById(loan.borrowerId);
+      events.push({date:loan.disbursedDate, type:"Disbursement", detail:`${esc(loan.loanId)} — ${esc(b?b.name:"—")}`, amount:-loan.principal});
+      loan.ledger.filter(e=>e.type==="payment").forEach(p=>{
+        events.push({date:p.date, type:"Collection", detail:`${esc(loan.loanId)} — ${esc(b?b.name:"—")}`, amount:p.amount});
+      });
+    });
+    events.sort((a,b)=>a.date.localeCompare(b.date));
+    let running = 0;
+    events = events.map(e=>{ running += e.amount; return {...e, running}; });
+    events.reverse();
+    const body = document.getElementById("cashflow-body");
+    body.innerHTML = events.length ? events.map(e=>`
+      <tr>
+        <td>${fmtDate(e.date)}</td>
+        <td>${esc(e.type)}</td>
+        <td>${esc(e.detail)}</td>
+        <td style="color:${e.amount<0?'var(--pink-ink)':'var(--green-ink)'}; font-weight:700;">${e.amount<0?"-":"+"}${pesoWhole(Math.abs(e.amount))}</td>
+        <td>${pesoWhole(e.running)}</td>
+      </tr>`).join("") : `<tr><td colspan="5" style="text-align:center; color:var(--ink-soft); padding:20px;">No activity yet</td></tr>`;
+  }
+
+  /* ======================================================
+     Render: Summary
+  ====================================================== */
+  function renderSummary(){
+    const byType = {flat:{count:0, principal:0, outstanding:0}, diminishing:{count:0, principal:0, outstanding:0}, flexible:{count:0, principal:0, outstanding:0}};
+    loans.forEach(loan=>{
+      const st = computeLoanState(loan);
+      byType[loan.type].count++;
+      byType[loan.type].principal += loan.principal;
+      byType[loan.type].outstanding += st.balance;
+    });
+    const typesBody = document.getElementById("summary-types");
+    typesBody.innerHTML = Object.keys(byType).map(t=>`
+      <tr>
+        <td><span class="tag ${esc(t)}">${typeLabel(t)}</span></td>
+        <td>${byType[t].count}</td>
+        <td>${pesoWhole(byType[t].principal)}</td>
+        <td>${pesoWhole(byType[t].outstanding)}</td>
+      </tr>`).join("");
+
+    const borrowerRows = borrowers.map(b=>{
+      const bLoans = loans.filter(l=>l.borrowerId===b.id);
+      const states = bLoans.map(l=>computeLoanState(l));
+      const outstanding = states.reduce((s,st)=>s+st.balance,0);
+      const worst = states.some(st=>st.status==="overdue") ? "overdue" : states.some(st=>st.status==="due") ? "due" : states.length ? "on-track" : "pending";
+      return {name:b.name, count:bLoans.length, outstanding, worst};
+    }).filter(r=>r.count>0).sort((a,b)=>b.outstanding-a.outstanding);
+    const borrowersBody = document.getElementById("summary-borrowers");
+    borrowersBody.innerHTML = borrowerRows.length ? borrowerRows.map(r=>`
+      <tr>
+        <td>${esc(r.name)}</td>
+        <td>${r.count}</td>
+        <td>${pesoWhole(r.outstanding)}</td>
+        <td><span class="tag ${esc(r.worst)}">${r.worst==="overdue"?"Overdue":r.worst==="due"?"Due soon":"On track"}</span></td>
+      </tr>`).join("") : `<tr><td colspan="4" style="text-align:center; color:var(--ink-soft); padding:20px;">No loans yet</td></tr>`;
+  }
+
+  /* ======================================================
+     Render orchestrator
+  ====================================================== */
+  function renderAll(){
+    renderDashboard();
+    renderBorrowers();
+    renderLoans();
+    renderPayments();
+    renderCashflow();
+    renderSummary();
+    saveData();
+  }
+
+  /* ======================================================
+     Borrower add / edit / delete / statement
+  ====================================================== */
+  let editingBorrowerIndex = -1;
+  function openBorrowerForm(index){
+    editingBorrowerIndex = index;
+    const isEdit = index > -1;
+    document.getElementById("nb-modal-title").textContent = isEdit ? "Edit borrower" : "Add borrower";
+    document.getElementById("nb-modal-sub").textContent = isEdit ? "Update this member's profile details." : "Create a new member account.";
+    document.getElementById("add-borrower-save").textContent = isEdit ? "Save changes" : "Save borrower";
+    const b = isEdit ? borrowers[index] : null;
+    document.getElementById("nb-name").value = b ? b.name : "";
+    document.getElementById("nb-phone").value = b ? b.phone : "";
+    document.getElementById("nb-address").value = b ? b.address : "";
+    document.getElementById("nb-branch").value = b ? b.branch : "Misamis Oriental — Main";
+    document.getElementById("add-borrower-backdrop").classList.add("show");
+  }
+  document.getElementById("btn-add-borrower").addEventListener("click", ()=>openBorrowerForm(-1));
+  document.getElementById("add-borrower-cancel").addEventListener("click", ()=>{
+    document.getElementById("add-borrower-backdrop").classList.remove("show");
+  });
+  document.getElementById("add-borrower-save").addEventListener("click", ()=>{
+    const name = document.getElementById("nb-name").value.trim();
+    const phone = document.getElementById("nb-phone").value.trim();
+    const address = document.getElementById("nb-address").value.trim();
+    const branch = document.getElementById("nb-branch").value;
+    if(!name){ toast("Enter the borrower's full name"); return; }
+    if(!phone){ toast("Add a contact number"); return; }
+
+    if(editingBorrowerIndex > -1){
+      const b = borrowers[editingBorrowerIndex];
+      b.name = name; b.phone = phone; b.address = address || "—"; b.branch = branch;
+      toast(`${name}'s profile updated`);
+    } else {
+      borrowerSeq += 1;
+      borrowers.unshift({id:`TD-${borrowerSeq}`, name, phone, address: address || "—", branch, since:new Date().toLocaleDateString("en-US",{month:"short", year:"numeric"})});
+      toast(`Borrower added — TD-${borrowerSeq}`);
+    }
+    document.getElementById("add-borrower-backdrop").classList.remove("show");
+    document.getElementById("nb-name").value = "";
+    document.getElementById("nb-phone").value = "";
+    document.getElementById("nb-address").value = "";
+    document.getElementById("nb-branch").value = "Misamis Oriental — Main";
+    renderAll();
+  });
+
+  let currentStatementIndex = -1;
+
+  function buildLoanBlockHTML(loan, borrower){
+    const st = computeLoanState(loan);
+    const payRows = [];
+    loan.ledger.forEach((e, idx)=>{
+      if(e.type !== "payment") return;
+      const impact = computePaymentImpact(loan, idx);
+      payRows.push({date:e.date, amount:e.amount, interest:impact.interestApplied, capital:impact.capitalApplied, balanceAfter:impact.balanceAfter});
+    });
+    payRows.sort((a,b)=>b.date.localeCompare(a.date));
+
+    const paymentsHTML = payRows.length ? payRows.map(p=>`
+      <tr>
+        <td>${fmtDate(p.date)}</td>
+        <td>${pesoWhole(p.amount)}</td>
+        <td>${pesoWhole(p.interest)}</td>
+        <td>${p.capital>0.5 ? pesoWhole(p.capital) : "—"}</td>
+        <td>${pesoWhole(p.balanceAfter)}</td>
+      </tr>`).join("") : `<tr><td colspan="5" style="text-align:center; color:var(--ink-soft); padding:14px;">No payments on record</td></tr>`;
+
+    return `
+    <div class="stmt-loan-block" data-loan-id="${esc(loan.loanId)}">
+      <div class="stmt-loan-title">
+        <h4>Loan ${esc(loan.loanId)} — ${typeLabel(loan.type)}</h4>
+        <button class="btn btn-ghost btn-sm no-print" data-print-loan="${esc(loan.loanId)}">🖨 Print this loan only</button>
+      </div>
+      <div class="statement-section">
+        <div class="statement-row"><span>Purpose</span><strong>${esc(loan.purpose)}</strong></div>
+        <div class="statement-row"><span>Principal</span><strong>${pesoWhole(loan.principal)}</strong></div>
+        <div class="statement-row"><span>Rate</span><strong>${loan.rate}%/cycle</strong></div>
+        <div class="statement-row"><span>Interest collected</span><strong>${pesoWhole(st.interestPaid)}</strong></div>
+        <div class="statement-row"><span>Capital collected</span><strong>${pesoWhole(st.principalPaid)}</strong></div>
+        <div class="statement-row"><span>Outstanding balance</span><strong>${pesoWhole(st.balance)}</strong></div>
+        <div class="statement-row"><span>Status</span><strong>${statusLabel(st)}</strong></div>
+      </div>
+      <h4 style="font-size:11.5px; text-transform:uppercase; letter-spacing:0.04em; color:var(--ink-soft); font-weight:700; margin:0 0 8px 0;">Payments</h4>
+      <table class="mini-table" style="margin-bottom:10px;">
+        <thead><tr><th>Date</th><th>Amount</th><th>Interest</th><th>Capital</th><th>Balance after</th></tr></thead>
+        <tbody>${paymentsHTML}</tbody>
+      </table>
+      <div class="statement-sign">
+        <div>Borrower signature</div>
+        <div>Loan officer signature</div>
+      </div>
+    </div>`;
+  }
+
+  function openBorrowerStatement(index){
+    currentStatementIndex = index;
+    const b = borrowers[index];
+    const bLoans = loans.filter(l=>l.borrowerId===b.id);
+
+    const headerHTML = `
+      <div class="statement-head">
+        <div>
+          <div class="statement-brand">TD Microfinance Business</div>
+          <div class="statement-branch">${esc(b.branch)}</div>
+        </div>
+        <div class="statement-date">Statement date<br>${fmtDate(todayISO())}</div>
+      </div>
+      <div class="statement-section">
+        <div class="statement-row"><span>Borrower</span><strong>${esc(b.name)}</strong></div>
+        <div class="statement-row"><span>Member ID</span><strong>${esc(b.id)}</strong></div>
+        <div class="statement-row"><span>Contact number</span><strong>${esc(b.phone)}</strong></div>
+        <div class="statement-row"><span>Address</span><strong>${esc(b.address)}</strong></div>
+        <div class="statement-row"><span>Member since</span><strong>${esc(b.since)}</strong></div>
+      </div>`;
+
+    const blocksHTML = bLoans.length
+      ? bLoans.map(l=>buildLoanBlockHTML(l, b)).join("")
+      : `<div class="empty-state">No loans on record for this borrower yet.</div>`;
+
+    document.getElementById("stmt-loan-blocks").innerHTML = headerHTML + blocksHTML;
+
+    document.querySelectorAll("[data-print-loan]").forEach(btn=>{
+      btn.addEventListener("click", ()=>printSingleLoan(btn.dataset.printLoan));
+    });
+
+    document.getElementById("borrower-stmt-backdrop").classList.add("show");
+  }
+
+  function printSingleLoan(loanId){
+    document.body.classList.add("print-single-loan");
+    document.querySelectorAll(".stmt-loan-block").forEach(block=>{
+      block.classList.toggle("print-target", block.dataset.loanId === loanId);
+    });
+    window.print();
+  }
+  window.addEventListener("afterprint", ()=>{
+    document.body.classList.remove("print-single-loan");
+    document.querySelectorAll(".stmt-loan-block").forEach(b=>b.classList.remove("print-target"));
+  });
+
+  document.getElementById("borrower-stmt-close").addEventListener("click", ()=>{
+    document.getElementById("borrower-stmt-backdrop").classList.remove("show");
+  });
+  document.getElementById("borrower-stmt-print").addEventListener("click", ()=>{
+    document.body.classList.remove("print-single-loan");
+    document.querySelectorAll(".stmt-loan-block").forEach(b=>b.classList.remove("print-target"));
+    window.print();
+  });
+  document.getElementById("borrower-stmt-edit").addEventListener("click", ()=>{
+    const index = currentStatementIndex;
+    document.getElementById("borrower-stmt-backdrop").classList.remove("show");
+    openBorrowerForm(index);
+  });
+  document.getElementById("borrower-stmt-delete").addEventListener("click", ()=>{
+    const b = borrowers[currentStatementIndex];
+    if(!b) return;
+    const hasLoans = loans.some(l=>l.borrowerId===b.id);
+    if(hasLoans){ toast("Can't delete — this borrower has loan records. Remove their loans first."); return; }
+    const confirmed = window.confirm(`Delete ${b.name}'s account (${b.id})? This cannot be undone.`);
+    if(!confirmed) return;
+    borrowers.splice(currentStatementIndex,1);
+    document.getElementById("borrower-stmt-backdrop").classList.remove("show");
+    toast(`${b.name}'s account was deleted`);
+    renderAll();
+  });
+
+  /* ======================================================
+     Loans: add + type pill helper
+  ====================================================== */
+  function wireTypePills(containerId, onSelect){
+    const group = document.getElementById(containerId);
+    group.querySelectorAll(".radio-pill").forEach(p=>{
+      p.addEventListener("click", ()=>{
+        group.querySelectorAll(".radio-pill").forEach(x=>x.classList.remove("active"));
+        p.classList.add("active");
+        onSelect(p.dataset.val);
+      });
+    });
+  }
+  let nlType = "flat";
+  function updateNlTermVisibility(type){
+    const isOpenEnded = type !== "flat";
+    document.getElementById("nl-term-wrap").style.display = isOpenEnded ? "none" : "block";
+    document.getElementById("nl-term-note").style.display = isOpenEnded ? "block" : "none";
+    document.getElementById("nl-term-row").classList.toggle("single-col", isOpenEnded);
+    const flatHint = document.getElementById("nl-flat-collection-hint");
+    if(flatHint) flatHint.style.display = isOpenEnded ? "none" : "block";
+    if(isOpenEnded) document.getElementById("nl-term").value = "";
+  }
+  wireTypePills("nl-type", v=>{
+    nlType=v;
+    document.getElementById("nl-type-hint").textContent = typeHint(v);
+    updateNlTermVisibility(v);
+  });
+  document.getElementById("nl-type-hint").textContent = typeHint(nlType);
+
+  document.getElementById("btn-add-loan").addEventListener("click", ()=>openLoanForm(null));
+  document.getElementById("add-loan-cancel").addEventListener("click", ()=>{
+    document.getElementById("add-loan-backdrop").classList.remove("show");
+  });
+
+  function updateSkipVisibility(prefix){
+    const isDaily = parseInt(document.getElementById(prefix+"-cycle").value,10) === 1;
+    document.getElementById(prefix+"-skip-wrap").style.display = isDaily ? "block" : "none";
+    if(!isDaily) document.getElementById(prefix+"-skip-weekends").checked = false;
+  }
+  function syncFlexibleFrequencyOptions(){
+    const nlFlexible = document.querySelector('#nl-cycle option[value="0"]');
+    const ccFlexible = document.querySelector('#cc-cycle option[value="0"]');
+    if(nlFlexible) nlFlexible.disabled = nlType !== "flat";
+    if(ccFlexible) ccFlexible.disabled = ccType !== "flat";
+    if(nlFlexible && nlFlexible.disabled && document.getElementById("nl-cycle").value === "0") document.getElementById("nl-cycle").value = "30";
+    if(ccFlexible && ccFlexible.disabled && document.getElementById("cc-cycle").value === "0") document.getElementById("cc-cycle").value = "30";
+  }
+  document.getElementById("nl-cycle").addEventListener("change", ()=>updateSkipVisibility("nl"));
+  document.getElementById("cc-cycle").addEventListener("change", ()=>{ updateSkipVisibility("cc"); updateCalculator(); });
+  document.getElementById("nl-type").addEventListener("click", ()=>syncFlexibleFrequencyOptions());
+  document.getElementById("cc-type").addEventListener("click", ()=>{ syncFlexibleFrequencyOptions(); updateCalculator(); });
+  syncFlexibleFrequencyOptions();
+
+  let editingLoanId = null;
+  function openLoanForm(loanId){
+    editingLoanId = loanId;
+    const isEdit = !!loanId;
+    const loan = isEdit ? loanById(loanId) : null;
+    document.getElementById("nl-modal-title").textContent = isEdit ? `Edit loan ${loan.loanId}` : "New loan";
+    document.getElementById("nl-modal-desc").textContent = isEdit ? "Update the loan terms. Existing payments and adjustments stay on the ledger." : "Set up the loan terms. You can backtrack payments any time after.";
+    document.getElementById("add-loan-save").textContent = isEdit ? "Save changes" : "Create loan";
+
+    document.getElementById("nl-borrower").value = loan ? loan.borrowerId : "";
+    document.getElementById("nl-purpose").value = loan ? loan.purpose : "";
+    document.getElementById("nl-principal").value = loan ? loan.principal : "";
+    document.getElementById("nl-rate").value = loan ? loan.rate : "";
+    document.getElementById("nl-term").value = loan && loan.term ? loan.term : "";
+    document.getElementById("nl-cycle").value = loan ? loan.cycleDays : "30";
+    document.getElementById("nl-skip-weekends").checked = !!(loan && loan.excludeWeekends);
+    updateSkipVisibility("nl");
+    document.getElementById("nl-date").value = loan ? loan.disbursedDate : todayISO();
+
+    const type = loan ? loan.type : "flat";
+    document.querySelector(`#nl-type [data-val="${type}"]`).click();
+
+    document.getElementById("add-loan-backdrop").classList.add("show");
+  }
+
+  document.getElementById("add-loan-save").addEventListener("click", ()=>{
+    const borrowerId = document.getElementById("nl-borrower").value;
+    const purpose = document.getElementById("nl-purpose").value.trim();
+    const principal = parseFloat(document.getElementById("nl-principal").value);
+    const rate = parseFloat(document.getElementById("nl-rate").value);
+    const isOpenEnded = nlType !== "flat";
+    const term = isOpenEnded ? null : parseInt(document.getElementById("nl-term").value,10);
+    const cycleDays = parseInt(document.getElementById("nl-cycle").value,10);
+    const excludeWeekends = cycleDays === 1 && (nlType === "flat" || document.getElementById("nl-skip-weekends").checked);
+    const disbursedDate = document.getElementById("nl-date").value || todayISO();
+
+    if(!borrowerId){ toast("Select a borrower"); return; }
+    if(!principal || principal < 500){ toast("Enter a principal of at least ₱500"); return; }
+    if(!rate || rate <= 0){ toast("Enter an interest rate"); return; }
+    if(!isOpenEnded && (!term || term <= 0)){ toast("Enter a loan term"); return; }
+    if(cycleDays < 0 || !Number.isFinite(cycleDays) || (cycleDays === 0 && nlType !== "flat")){ toast("Flexible collection is available for flat-rate loans only"); return; }
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(disbursedDate) || Number.isNaN(new Date(disbursedDate+"T00:00:00").getTime())){ toast("Enter a valid disbursement date"); return; }
+
+    const ag = aggregate();
+
+    if(editingLoanId){
+      const loan = loanById(editingLoanId);
+      const increase = principal - loan.principal;
+      if(increase > 0.5 && increase > ag.cashAvailable){
+        toast(`Not enough cash available to raise this loan by ${peso(increase)} — only ${peso(ag.cashAvailable)} on hand`);
+        return;
+      }
+      loan.borrowerId = borrowerId;
+      loan.purpose = purpose || "General purpose";
+      loan.type = nlType;
+      loan.principal = principal;
+      loan.rate = rate;
+      loan.term = term;
+      loan.cycleDays = cycleDays;
+      loan.excludeWeekends = excludeWeekends;
+      loan.disbursedDate = disbursedDate;
+      toast(`${loan.loanId} updated`);
+    } else {
+      if(principal > ag.cashAvailable){
+        toast(`Not enough cash available — you have ${peso(ag.cashAvailable)} but this loan needs ${peso(principal)}`);
+        return;
+      }
+      loanSeq += 1;
+      const newId = `LN${String(loanSeq).padStart(3,"0")}`;
+      loans.unshift({loanId:newId, borrowerId, purpose: purpose||"General purpose", type:nlType, principal, rate, term, cycleDays, excludeWeekends, disbursedDate, ledger:[]});
+      toast(`Loan created — ${newId}`);
+    }
+    document.getElementById("add-loan-backdrop").classList.remove("show");
+    renderAll();
+  });
+
+  /* ======================================================
+     Backtrack modal
+  ====================================================== */
+  let backtrackLoanId = null;
+  function openBacktrack(loanId){
+    backtrackLoanId = loanId;
+    refreshBacktrack();
+    document.getElementById("bt-pay-date").value = todayISO();
+    document.getElementById("backtrack-backdrop").classList.add("show");
+  }
+  function refreshBacktrack(){
+    const loan = loanById(backtrackLoanId);
+    if(!loan) return;
+    const b = borrowerById(loan.borrowerId);
+    const st = computeLoanState(loan);
+    document.getElementById("bt-loan-id").textContent = loan.loanId;
+    document.getElementById("bt-loan-sub").textContent = `${b?b.name:"—"} · ${typeLabel(loan.type)} · ${peso(loan.principal)} principal at ${loan.rate}% per ${loan.cycleDays}-day cycle${loan.excludeWeekends ? " (weekdays only)" : ""}${loan.term ? ` · ${loan.term}-day term` : " · open-ended, no fixed term"}`;
+    document.getElementById("bt-balance").textContent = peso(st.balance);
+    document.getElementById("bt-interest-paid").textContent = peso(st.interestPaid);
+    document.getElementById("bt-cycles").textContent = st.totalCycles ? `${st.cyclesElapsed} / ${st.totalCycles}` : `${st.cyclesElapsed} (ongoing)`;
+
+    const isFlat = loan.type === "flat";
+
+    // One unified record: real ledger entries (disbursement/payment/adjustment) plus a
+    // computed "interest" line for any cycle that left something unpaid — so the whole
+    // story lives in one place instead of a separate cycle-by-cycle breakdown.
+    const realEntries = [{date:loan.disbursedDate, type:"disbursement", amount:loan.principal, note:"Loan disbursed"}, ...loan.ledger];
+
+    const interestEntries = st.schedule.filter(s=>s.unpaid>0.5).map(s=>{
+      let note, amount;
+      if(isFlat){
+        amount = s.totalDue;
+        note = `${peso(s.totalDue)} due this cycle — ${peso(s.unpaid)} short`;
+      } else if(loan.type === "flexible"){
+        amount = s.interest;
+        note = s.rolled > 0.5
+          ? `Interest accrued — ${peso(s.rolled)} rolled into principal (compounds next cycle)`
+          : `Interest accrued — ${peso(s.unpaid)} left unpaid`;
+      } else { // diminishing
+        amount = s.interest;
+        note = `Interest accrued — ${peso(s.unpaid)} unpaid, carried as arrears (doesn't compound)`;
+      }
+      return {date:s.date, type:"interest", amount, note};
+    });
+
+    const entries = [...realEntries, ...interestEntries].sort((a,b)=>{
+      const cmp = a.date.localeCompare(b.date);
+      if(cmp !== 0) return cmp;
+      // same date: disbursement first, then payments/adjustments, then the computed interest note
+      const rank = {disbursement:0, payment:1, adjustment:1, interest:2};
+      return (rank[a.type]??1) - (rank[b.type]??1);
+    });
+
+    // Outstanding balance after each row, settled to the end of that row's own cycle (or
+    // today, whichever is earlier) — not the row's raw date. A payment dated a day or two
+    // before its cycle's actual boundary would otherwise show a "balance after" that
+    // hasn't caught up with that cycle's own interest yet, which is misleading and can
+    // drift out of sync with the loan's real current balance shown elsewhere.
+    const balanceCache = {};
+    entries.forEach(e=>{
+      if(e.type === "disbursement"){
+        e.balanceAfter = loan.principal;
+        return;
+      }
+      const cycleNum = cycleIndexForDate(loan, e.date);
+      const cycleBoundary = addCycles(loan.disbursedDate, loan.cycleDays, cycleNum, loan.excludeWeekends);
+      const settledAsOf = toISO(cycleBoundary) < todayISO() ? cycleBoundary : today();
+      const key = toISO(settledAsOf);
+      if(balanceCache[key] === undefined){
+        balanceCache[key] = computeLoanState(loan, settledAsOf).balance;
+      }
+      e.balanceAfter = balanceCache[key];
+    });
+
+    const ledgerBody = document.getElementById("bt-ledger");
+    ledgerBody.innerHTML = entries.map(e=>`
+      <tr${e.type==="interest" ? ' style="color:var(--ink-soft);"' : ''}>
+        <td>${fmtDate(e.date)}</td>
+        <td style="text-transform:capitalize;">${esc(e.type)}</td>
+        <td>${e.type==="disbursement" ? "" : (e.type==="adjustment" ? "→ " : "")}${peso(e.amount)}</td>
+        <td>${peso(e.balanceAfter)}</td>
+        <td>${esc(e.note||"")}</td>
+      </tr>`).join("");
+
+    // Automatically preview the next upcoming cycle — a forecast, not an actual event yet —
+    // so there's a running sense of what's coming due and how much interest it will add.
+    const upcomingBody = document.getElementById("bt-ledger-upcoming");
+    const nextCycleNum = st.cyclesElapsed + 1;
+    const loanMatured = st.totalCycles && nextCycleNum > st.totalCycles;
+    if(st.balance <= 0.5 || loanMatured){
+      upcomingBody.innerHTML = "";
+    } else {
+      const nextDueDate = toISO(addCycles(loan.disbursedDate, loan.cycleDays, nextCycleNum, loan.excludeWeekends));
+      let projInterest, projTotal, projNote;
+      if(isFlat){
+        const perCyclePrincipal = loan.principal / st.totalCycles;
+        const perCycleInterest = (loan.principal*(loan.rate/100)*st.totalCycles) / st.totalCycles;
+        projInterest = perCycleInterest;
+        projTotal = perCyclePrincipal + perCycleInterest;
+        projNote = `Projected — ${peso(projTotal)} due this cycle if paid on time`;
+      } else {
+        const base = st.principalBase !== null ? st.principalBase : st.balance;
+        projInterest = base * (loan.rate/100);
+        projTotal = st.balance + projInterest;
+        projNote = loan.type === "flexible"
+          ? `Projected — if unpaid, ${peso(projInterest)} rolls in, bringing the balance to ${peso(projTotal)}`
+          : `Projected — if unpaid, ${peso(projInterest)} carries as arrears, bringing the balance to ${peso(projTotal)}`;
+      }
+      upcomingBody.innerHTML = `
+      <tr style="color:var(--ink-soft); border-top:2px dashed var(--line);">
+        <td>${fmtDate(nextDueDate)}</td>
+        <td style="text-transform:capitalize;">Upcoming</td>
+        <td>${peso(projInterest)}</td>
+        <td>${peso(projTotal)}</td>
+        <td>${projNote}</td>
+      </tr>`;
+    }
+    saveData();
+  }
+  document.getElementById("backtrack-close").addEventListener("click", ()=>{
+    document.getElementById("backtrack-backdrop").classList.remove("show");
+    renderAll();
+  });
+  document.getElementById("bt-add-payment").addEventListener("click", ()=>{
+    const loan = loanById(backtrackLoanId);
+    const date = document.getElementById("bt-pay-date").value || todayISO();
+    const amount = parseFloat(document.getElementById("bt-pay-amount").value);
+    if(isNaN(amount) || amount < 0){ toast("Enter an amount — use 0 if nothing was paid that cycle"); return; }
+    const dup = loan.type === "flat" ? null : findDuplicateCyclePayment(loan, date, -1);
+    if(dup){ toast(`This due cycle already has a payment logged (${fmtDate(dup.date)}) — edit that entry instead`); return; }
+    loan.ledger.push({date, type:"payment", amount, note: amount === 0 ? "No payment received — unpaid interest rolls in as usual" : "Backtracked payment"});
+    document.getElementById("bt-pay-amount").value = "";
+    refreshBacktrack();
+    toast(amount === 0 ? "Logged as unpaid — interest rolls into the balance" : "Payment added to ledger");
+  });
+
+  /* ======================================================
+     Payments page
+  ====================================================== */
+  document.getElementById("pay-loan").addEventListener("change", ()=>{ updatePayInstallments(); updatePayPreview(); });
+  document.getElementById("pay-date").value = todayISO();
+  document.getElementById("btn-record-payment").addEventListener("click", ()=>{
+    const loanId = document.getElementById("pay-loan").value;
+    const amount = parseFloat(document.getElementById("pay-amount").value);
+    const date = document.getElementById("pay-date").value || todayISO();
+    const note = document.getElementById("pay-note").value.trim();
+    if(!loanId){ toast("Select a loan"); return; }
+    if(isNaN(amount) || !Number.isFinite(amount) || amount < 0){ toast("Enter an amount — use 0 if nothing was paid"); return; }
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(date) || Number.isNaN(new Date(date+"T00:00:00").getTime())){ toast("Enter a valid payment date"); return; }
+    const loan = loanById(loanId);
+    if(!loan){ toast("Selected loan was not found"); return; }
+    const installmentDate = document.getElementById("pay-installment").value || "";
+    if(installmentDate && loan.type !== "flat"){ toast("Specific installment selection is available for flat-rate loans"); return; }
+    if(installmentDate && !flatInstallmentDates(loan).includes(installmentDate)){ toast("Choose a valid installment date"); return; }
+    const dup = loan.type === "flat" ? null : findDuplicateCyclePayment(loan, date, -1);
+    if(dup){ toast(`This due cycle already has a payment logged (${fmtDate(dup.date)}) — edit that entry instead`); return; }
+    loan.ledger.push({date, type:"payment", amount, note: note || (amount === 0 ? "No payment received" : ""), ...(installmentDate ? {installmentDate} : {})});
+    // Clear the entire payment-entry form after a successful record. Saved ledger data remains intact.
+    document.getElementById("pay-loan").value = "";
+    document.getElementById("pay-amount").value = "";
+    document.getElementById("pay-date").value = todayISO();
+    document.getElementById("pay-note").value = "";
+    document.getElementById("pay-installment").value = "";
+    updatePayInstallments();
+    updatePayPreview();
+    toast(amount === 0 ? "Logged as unpaid for this cycle" : (installmentDate ? `Payment recorded for installment due ${fmtDate(installmentDate)}` : "Payment recorded"));
+    renderAll();
+  });
+
+  document.getElementById("edit-payment-cancel").addEventListener("click", ()=>{
+    document.getElementById("edit-payment-backdrop").classList.remove("show");
+  });
+  document.getElementById("edit-payment-save").addEventListener("click", ()=>{
+    if(!editingPayment) return;
+    const loan = loanById(editingPayment.loanId);
+    if(!loan) return;
+    const entry = loan.ledger[editingPayment.index];
+    if(!entry) return;
+    const amount = parseFloat(document.getElementById("ep-amount").value);
+    const date = document.getElementById("ep-date").value || todayISO();
+    const note = document.getElementById("ep-note").value.trim();
+    if(isNaN(amount) || !Number.isFinite(amount) || amount < 0){ toast("Enter an amount — use 0 if nothing was paid"); return; }
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(date) || Number.isNaN(new Date(date+"T00:00:00").getTime())){ toast("Enter a valid payment date"); return; }
+    const dup = findDuplicateCyclePayment(loan, date, editingPayment.index);
+    if(dup){ toast(`This due cycle already has a payment logged (${fmtDate(dup.date)}) — edit that entry instead`); return; }
+    entry.amount = amount;
+    entry.date = date;
+    entry.note = note;
+    document.getElementById("edit-payment-backdrop").classList.remove("show");
+    toast("Payment updated");
+    renderAll();
+  });
+
+  /* ======================================================
+     Capital & withdrawals
+  ====================================================== */
+  let editingCapitalIndex = -1;
+  function openCapitalForm(index){
+    editingCapitalIndex = index;
+    const isEdit = index > -1;
+    const c = isEdit ? business.capitalLog[index] : null;
+    document.getElementById("ac-modal-title").textContent = isEdit ? "Edit capital entry" : "Add capital";
+    document.getElementById("ac-modal-desc").textContent = isEdit ? "Update this capital record." : "Record new capital invested into the business.";
+    document.getElementById("add-capital-save").textContent = isEdit ? "Save changes" : "Add capital";
+    document.getElementById("ac-amount").value = c ? c.amount : "";
+    document.getElementById("ac-date").value = c ? c.date : todayISO();
+    document.getElementById("ac-note").value = c ? (c.note||"") : "";
+    document.getElementById("add-capital-backdrop").classList.add("show");
+  }
+  document.getElementById("btn-add-capital").addEventListener("click", ()=>openCapitalForm(-1));
+  document.getElementById("add-capital-cancel").addEventListener("click", ()=>document.getElementById("add-capital-backdrop").classList.remove("show"));
+  document.getElementById("add-capital-save").addEventListener("click", ()=>{
+    const amount = parseFloat(document.getElementById("ac-amount").value);
+    const date = document.getElementById("ac-date").value || todayISO();
+    const note = document.getElementById("ac-note").value.trim();
+    if(!Number.isFinite(amount) || !amount || amount<=0){ toast("Enter a valid amount"); return; }
+    if(editingCapitalIndex > -1){
+      business.capitalLog[editingCapitalIndex] = {date, amount, note};
+      toast("Capital entry updated");
+    } else {
+      business.capitalLog.unshift({date, amount, note});
+      toast(`Added ${peso(amount)} in capital`);
+    }
+    document.getElementById("add-capital-backdrop").classList.remove("show");
+    renderAll();
+  });
+
+  let editingWithdrawalIndex = -1;
+  function openWithdrawForm(index){
+    editingWithdrawalIndex = index;
+    const isEdit = index > -1;
+    const w = isEdit ? business.withdrawalLog[index] : null;
+    document.getElementById("wd-modal-title").textContent = isEdit ? "Edit withdrawal" : "Withdraw funds";
+    document.getElementById("wd-modal-desc").textContent = isEdit ? "Update this withdrawal record." : "Record a withdrawal of cash from the business.";
+    document.getElementById("withdraw-save").textContent = isEdit ? "Save changes" : "Withdraw";
+    document.getElementById("wd-amount").value = w ? w.amount : "";
+    document.getElementById("wd-date").value = w ? w.date : todayISO();
+    document.getElementById("wd-note").value = w ? (w.note||"") : "";
+    document.getElementById("withdraw-backdrop").classList.add("show");
+  }
+  document.getElementById("btn-withdraw").addEventListener("click", ()=>openWithdrawForm(-1));
+  document.getElementById("withdraw-cancel").addEventListener("click", ()=>document.getElementById("withdraw-backdrop").classList.remove("show"));
+  document.getElementById("withdraw-save").addEventListener("click", ()=>{
+    const amount = parseFloat(document.getElementById("wd-amount").value);
+    const date = document.getElementById("wd-date").value || todayISO();
+    const note = document.getElementById("wd-note").value.trim();
+    if(!Number.isFinite(amount) || !amount || amount<=0){ toast("Enter a valid amount"); return; }
+
+    // when checking available cash, exclude the entry being edited from the "already withdrawn" total
+    const ag = aggregate();
+    const currentAmt = editingWithdrawalIndex > -1 ? business.withdrawalLog[editingWithdrawalIndex].amount : 0;
+    const availableForThis = ag.cashAvailable + currentAmt;
+    if(amount > availableForThis){ toast("That's more than the cash currently available"); return; }
+
+    if(editingWithdrawalIndex > -1){
+      business.withdrawalLog[editingWithdrawalIndex] = {date, amount, note};
+      toast("Withdrawal updated");
+    } else {
+      business.withdrawalLog.unshift({date, amount, note});
+      toast(`Withdrew ${peso(amount)}`);
+    }
+    document.getElementById("withdraw-backdrop").classList.remove("show");
+    renderAll();
+  });
+
+  function renderCapitalHistory(){
+    const body = document.getElementById("capital-history-body");
+    body.innerHTML = business.capitalLog.length ? business.capitalLog.map((c,i)=>`
+      <tr>
+        <td>${fmtDate(c.date)}</td><td>${peso(c.amount)}</td><td>${esc(c.note||"")}</td>
+        <td style="white-space:nowrap; text-align:right;">
+          <button class="fire-btn" title="Edit" data-cap-edit="${i}">✏️</button>
+          <button class="fire-btn" title="Delete" data-cap-delete="${i}">🗑️</button>
+        </td>
+      </tr>`).join("") : `<tr><td colspan="4" style="text-align:center; color:var(--ink-soft); padding:14px;">No capital recorded yet</td></tr>`;
+    body.querySelectorAll("[data-cap-edit]").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        document.getElementById("capital-history-backdrop").classList.remove("show");
+        openCapitalForm(parseInt(btn.dataset.capEdit,10));
+      });
+    });
+    body.querySelectorAll("[data-cap-delete]").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const i = parseInt(btn.dataset.capDelete,10);
+        const c = business.capitalLog[i];
+        if(!window.confirm(`Delete this capital entry of ${peso(c.amount)}?`)) return;
+        business.capitalLog.splice(i,1);
+        toast("Capital entry deleted");
+        renderCapitalHistory();
+        renderAll();
+      });
+    });
+  }
+  document.getElementById("btn-capital-history").addEventListener("click", ()=>{
+    renderCapitalHistory();
+    document.getElementById("capital-history-backdrop").classList.add("show");
+  });
+  document.getElementById("capital-history-close").addEventListener("click", ()=>document.getElementById("capital-history-backdrop").classList.remove("show"));
+
+  function renderWithdrawalHistory(){
+    const body = document.getElementById("withdrawal-history-body");
+    body.innerHTML = business.withdrawalLog.length ? business.withdrawalLog.map((w,i)=>`
+      <tr>
+        <td>${fmtDate(w.date)}</td><td>${peso(w.amount)}</td><td>${esc(w.note||"")}</td>
+        <td style="white-space:nowrap; text-align:right;">
+          <button class="fire-btn" title="Edit" data-wd-edit="${i}">✏️</button>
+          <button class="fire-btn" title="Delete" data-wd-delete="${i}">🗑️</button>
+        </td>
+      </tr>`).join("") : `<tr><td colspan="4" style="text-align:center; color:var(--ink-soft); padding:14px;">No withdrawals recorded yet</td></tr>`;
+    body.querySelectorAll("[data-wd-edit]").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        document.getElementById("withdrawal-history-backdrop").classList.remove("show");
+        openWithdrawForm(parseInt(btn.dataset.wdEdit,10));
+      });
+    });
+    body.querySelectorAll("[data-wd-delete]").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const i = parseInt(btn.dataset.wdDelete,10);
+        const w = business.withdrawalLog[i];
+        if(!window.confirm(`Delete this withdrawal of ${peso(w.amount)}?`)) return;
+        business.withdrawalLog.splice(i,1);
+        toast("Withdrawal deleted");
+        renderWithdrawalHistory();
+        renderAll();
+      });
+    });
+  }
+  document.getElementById("btn-withdrawal-history").addEventListener("click", ()=>{
+    renderWithdrawalHistory();
+    document.getElementById("withdrawal-history-backdrop").classList.add("show");
+  });
+  document.getElementById("withdrawal-history-close").addEventListener("click", ()=>document.getElementById("withdrawal-history-backdrop").classList.remove("show"));
+
+  /* ======================================================
+     Toolbar: compounding toggle, export, backup, restore, password
+  ====================================================== */
+  let compoundingActive = true;
+  document.getElementById("btn-compounding-toggle").addEventListener("click", ()=>{
+    compoundingActive = !compoundingActive;
+    const btn = document.getElementById("btn-compounding-toggle");
+    const info = document.getElementById("compounding-info");
+    if(compoundingActive){
+      btn.textContent = "🔥 Compounding interest active";
+      btn.classList.add("active-badge");
+      info.style.display = "block";
+    } else {
+      btn.textContent = "🔥 Compounding interest paused";
+      btn.classList.remove("active-badge");
+      info.style.display = "none";
+    }
+    toast(compoundingActive ? "Compounding interest is active for Flexible loans" : "Note: Flexible loans still compound — this just hides the reminder banner");
+  });
+
+  function snapshotData(){
+    return JSON.stringify({business, borrowers, loans, borrowerSeq, loanSeq});
+  }
+  function applySnapshot(json){
+    const data = typeof json === "string" ? JSON.parse(json) : json;
+    if(!validateSnapshot(data)) throw new Error("This file is not a valid TD Microfinance backup.");
+    business = {...data.business, backupSnapshot:null};
+    borrowers = data.borrowers; loans = data.loans;
+    storageLoadFailed = false;
+    borrowerSeq = Number(data.borrowerSeq); loanSeq = Number(data.loanSeq);
+    renderAll();
+  }
+
+  document.getElementById("btn-export").addEventListener("click", ()=>{
+    const blob = new Blob([snapshotData()], {type:"application/json"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `td-microfinance-export-${todayISO()}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url), 1000);
+    toast("Data exported");
+  });
+
+  document.getElementById("btn-backup").addEventListener("click", ()=>{
+    business.backupSnapshot = snapshotData();
+    toast("Backup saved for this session only — use Export for a permanent backup");
+  });
+
+  // Restore an exported JSON backup after validating its structure. A confirmation is
+  // required because importing replaces the current records on this device.
+  const importInput = document.createElement("input");
+  importInput.type = "file"; importInput.accept = ".json,application/json";
+  importInput.hidden = true; importInput.id = "import-backup-file";
+  document.body.appendChild(importInput);
+  const importButton = document.createElement("button");
+  importButton.className = "pill-btn"; importButton.type = "button";
+  importButton.textContent = "📂 Import backup";
+  importButton.title = "Import a previously exported JSON backup";
+  document.getElementById("btn-export").insertAdjacentElement("afterend", importButton);
+  importButton.addEventListener("click", ()=>importInput.click());
+  importInput.addEventListener("change", async ()=>{
+    const file = importInput.files && importInput.files[0];
+    if(!file) return;
+    try{
+      const text = await file.text();
+      const data = JSON.parse(text);
+      if(!validateSnapshot(data)) throw new Error("The selected file is not a valid TD Microfinance backup.");
+      if(!window.confirm("Importing this backup will replace all current borrowers, loans, payments, capital, and withdrawals on this device. Export your current data first if needed. Continue?")) return;
+      applySnapshot(data);
+      toast("Backup imported successfully");
+    }catch(err){ toast(err && err.message ? err.message : "Could not import this backup file"); }
+    finally{ importInput.value = ""; }
+  });
+
+  document.getElementById("btn-restore").addEventListener("click", ()=>{
+    if(!business.backupSnapshot){ toast("No backup saved yet this session"); return; }
+    document.getElementById("restore-backdrop").classList.add("show");
+  });
+  document.getElementById("restore-cancel").addEventListener("click", ()=>document.getElementById("restore-backdrop").classList.remove("show"));
+  document.getElementById("restore-confirm").addEventListener("click", ()=>{
+    const snap = business.backupSnapshot;
+    try{
+      applySnapshot(snap);
+      business.backupSnapshot = snap; // keep it available after restore too
+      document.getElementById("restore-backdrop").classList.remove("show");
+      toast("Backup restored");
+    }catch(err){ toast(err.message || "Backup could not be restored"); }
+  });
+
+  document.getElementById("btn-change-password").addEventListener("click", ()=>{
+    document.getElementById("pw-new").value = "";
+    document.getElementById("password-backdrop").classList.add("show");
+  });
+  document.getElementById("password-cancel").addEventListener("click", ()=>document.getElementById("password-backdrop").classList.remove("show"));
+  document.getElementById("password-save").addEventListener("click", ()=>{
+    const pw = document.getElementById("pw-new").value;
+    if(!pw || pw.length < 4){ toast("Use at least 4 characters"); return; }
+    if(!setStoredHash(hashPw(pw))) return;
+    document.getElementById("password-backdrop").classList.remove("show");
+    toast("Password updated — you'll need it next time you open the app");
+  });
+
+  /* ======================================================
+     Persistent storage (this device only) + app lock
+  ====================================================== */
+  const LOCK_PW_KEY = "td_micro_pw_hash_v1";
+  const LOCK_DATA_KEY = "td_micro_data_v1";
+  let storageLoadFailed = false;
+
+  function hashPw(pw){
+    // Not cryptography — just enough to avoid storing the password in plain text.
+    let h = 0;
+    for(let i=0;i<pw.length;i++){ h = (h*31 + pw.charCodeAt(i)) | 0; }
+    return String(h);
+  }
+  function getStoredHash(){
+    try{ return window.localStorage.getItem(LOCK_PW_KEY); }catch(e){ return null; }
+  }
+  function setStoredHash(hash){
+    try{
+      const testKey = "td_micro_storage_test_v1";
+      window.localStorage.setItem(testKey, "ok");
+      if(window.localStorage.getItem(testKey) !== "ok") return false;
+      window.localStorage.removeItem(testKey);
+      window.localStorage.setItem(LOCK_PW_KEY, hash);
+      return window.localStorage.getItem(LOCK_PW_KEY) === hash;
+    }catch(e){ return false; }
+  }
+
+  function saveData(){
+    if(storageLoadFailed){
+      toast("Saved data was not loaded safely. Import a valid backup before saving changes.");
+      return false;
+    }
+    try{
+      localStorage.setItem(LOCK_DATA_KEY, JSON.stringify({business, borrowers, loans, borrowerSeq, loanSeq}));
+      return true;
+    }catch(e){
+      toast("Save failed — storage may be full or unavailable. Export a backup now.");
+      return false;
+    }
+  }
+  function validateSnapshot(d){
+    const validDate = v => typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v) && !Number.isNaN(new Date(v+"T00:00:00").getTime()) && toISO(new Date(v+"T00:00:00")) === v;
+    const validMoney = v => Number.isFinite(Number(v)) && Number(v) >= 0;
+    if(!d || typeof d !== "object" || !d.business || typeof d.business !== "object" ||
+       !Array.isArray(d.business.capitalLog) || !Array.isArray(d.business.withdrawalLog) ||
+       !Array.isArray(d.borrowers) || !Array.isArray(d.loans) ||
+       !Number.isFinite(Number(d.borrowerSeq)) || !Number.isFinite(Number(d.loanSeq))) return false;
+    if(!d.borrowers.every(b => b && typeof b.id === "string" && /^[A-Za-z0-9_-]+$/.test(b.id) && typeof b.name === "string" &&
+      typeof b.phone === "string" && typeof b.address === "string" && typeof b.branch === "string")) return false;
+    if(!d.business.capitalLog.every(x => x && validDate(x.date) && validMoney(x.amount))) return false;
+    if(!d.business.withdrawalLog.every(x => x && validDate(x.date) && validMoney(x.amount))) return false;
+    if(new Set(d.borrowers.map(b => b.id)).size !== d.borrowers.length || new Set(d.loans.map(l => l && l.loanId)).size !== d.loans.length) return false;
+    return d.loans.every(l => l && d.borrowers.some(b => b.id === l.borrowerId) && typeof l.loanId === "string" && /^[A-Za-z0-9_-]+$/.test(l.loanId) && typeof l.borrowerId === "string" && /^[A-Za-z0-9_-]+$/.test(l.borrowerId) &&
+      typeof l.purpose === "string" && ["flat","diminishing","flexible"].includes(l.type) &&
+      Number.isFinite(Number(l.principal)) && Number(l.principal) >= 0 &&
+      Number.isFinite(Number(l.rate)) && Number(l.rate) >= 0 &&
+      Number.isFinite(Number(l.cycleDays)) && Number(l.cycleDays) > 0 && validDate(l.disbursedDate) &&
+      (l.type === "flat" ? Number.isFinite(Number(l.term)) && Number(l.term) > 0 : (l.term === null || (Number.isFinite(Number(l.term)) && Number(l.term) > 0))) &&
+      Array.isArray(l.ledger) && l.ledger.every(e => e && ["payment","adjustment"].includes(e.type) &&
+        validDate(e.date) && validMoney(e.amount) && typeof (e.note || "") === "string"));
+  }
+  function loadData(){
+    try{
+      const raw = localStorage.getItem(LOCK_DATA_KEY);
+      if(!raw) return false;
+      const d = JSON.parse(raw);
+      if(!validateSnapshot(d)) { storageLoadFailed = true; toast("Saved data is invalid. Import a known-good backup before making changes."); return false; }
+      business = {...d.business, backupSnapshot:null}; borrowers = d.borrowers; loans = d.loans;
+      borrowerSeq = Number(d.borrowerSeq); loanSeq = Number(d.loanSeq);
+      return true;
+    }catch(e){ storageLoadFailed = true; toast("Saved data could not be read. Import a known-good backup before making changes."); return false; }
+  }
+
+  function unlockApp(){
+    document.getElementById("lock-overlay").style.display = "none";
+  }
+
+  function initLock(){
+    const hash = getStoredHash();
+    if(!hash){
+      document.getElementById("lock-setup-view").style.display = "block";
+      document.getElementById("lock-enter-view").style.display = "none";
+      document.getElementById("lock-setup-pw1").focus();
+    } else {
+      document.getElementById("lock-setup-view").style.display = "none";
+      document.getElementById("lock-enter-view").style.display = "block";
+      document.getElementById("lock-enter-pw").focus();
+    }
+  }
+
+  function attemptSetPassword(){
+    const first = document.getElementById("lock-setup-pw1");
+    const second = document.getElementById("lock-setup-pw2");
+    const pw1 = first.value;
+    const pw2 = second.value;
+    const err = document.getElementById("lock-setup-error");
+    if(!pw1 || pw1.length < 4){ err.textContent = "Please enter at least 4 characters."; err.style.display = "block"; first.focus(); return; }
+    if(pw1 !== pw2){ err.textContent = "The passwords do not match. Please type the same password in both boxes."; err.style.display = "block"; second.focus(); return; }
+    if(pw1.trim() !== pw1){ err.textContent = "Please remove spaces at the beginning or end of the password."; err.style.display = "block"; first.focus(); return; }
+    err.style.display = "none";
+    try{
+      const saved = setStoredHash(hashPw(pw1));
+      if(!saved){
+        err.textContent = "The browser could not save the password. Please open this app in Chrome or Edge using its extracted folder, not inside the ZIP preview. If using a private window, open a normal window and try again.";
+        err.style.display = "block";
+        return;
+      }
+      first.value = ""; second.value = "";
+      unlockApp();
+      try {
+        loadData();
+        renderAll();
+      } catch (renderError) {
+        console.error("App opened, but initial rendering failed:", renderError);
+        err.textContent = "Password saved, but the app could not finish loading. Close this tab and reopen the app.";
+        err.style.display = "block";
+      }
+    }catch(e){
+      console.error("Password setup error:", e);
+      err.textContent = "Could not save the password in this browser. Please use the included Start-App file to open the app on a local address.";
+      err.style.display = "block";
+    }
+  }
+  document.getElementById("lock-setup-save").addEventListener("click", attemptSetPassword);
+  document.getElementById("lock-setup-pw1").addEventListener("keydown", e=>{ if(e.key === "Enter") document.getElementById("lock-setup-pw2").focus(); });
+  document.getElementById("lock-setup-pw2").addEventListener("keydown", e=>{ if(e.key === "Enter") attemptSetPassword(); });
+
+  function attemptUnlock(){
+    const pw = document.getElementById("lock-enter-pw").value;
+    const err = document.getElementById("lock-enter-error");
+    if(hashPw(pw) === getStoredHash()){
+      err.style.display = "none";
+      unlockApp();
+    } else {
+      err.style.display = "block";
+      document.getElementById("lock-enter-pw").value = "";
+      document.getElementById("lock-enter-pw").focus();
+    }
+  }
+  document.getElementById("lock-enter-unlock").addEventListener("click", attemptUnlock);
+  document.getElementById("lock-enter-pw").addEventListener("keydown", (e)=>{ if(e.key === "Enter") attemptUnlock(); });
+
+  document.getElementById("lock-forgot").addEventListener("click", ()=>{
+    const ok = window.confirm("Resetting clears your password AND all saved data on this device (borrowers, loans, capital records). This can't be undone. Continue?");
+    if(!ok) return;
+    try{ localStorage.removeItem(LOCK_PW_KEY); localStorage.removeItem(LOCK_DATA_KEY); }catch(e){}
+    location.reload();
+  });
+
+  /* ======================================================
+     Calculator
+  ====================================================== */
+  let ccType = "flat";
+  function updateCcTermVisibility(type){
+    const isOpenEnded = type !== "flat";
+    document.getElementById("cc-term-wrap").style.display = isOpenEnded ? "none" : "block";
+    document.getElementById("cc-term-row").classList.toggle("single-col", isOpenEnded);
+  }
+  wireTypePills("cc-type", v=>{ ccType=v; updateCcTermVisibility(v); updateCalculator(); });
+  updateCcTermVisibility(ccType);
+
+  function simulateGeneric(principal, rate, term, cycleDays, type, startDate, excludeWeekends){
+    const start = startDate || todayISO();
+    const totalCycles = Math.max(1, Math.round(term/cycleDays));
+    let schedule = [];
+    if(type === "flat"){
+      const totalInterest = principal*(rate/100)*totalCycles;
+      const perInterest = totalInterest/totalCycles;
+      const perPrincipal = principal/totalCycles;
+      for(let i=1;i<=totalCycles;i++){
+        schedule.push({
+          cycle:i, date:toISO(addCycles(start, cycleDays, i, excludeWeekends)),
+          principal:perPrincipal, interest:perInterest, totalDue:perPrincipal+perInterest,
+          balanceAfter: Math.max(0, principal - perPrincipal*i)
+        });
+      }
+      return {schedule, totalInterest, totalRepay: principal+totalInterest};
+    }
+    if(type === "diminishing"){
+      let remaining = principal, totalInterest=0;
+      const portion = principal/totalCycles;
+      for(let i=1;i<=totalCycles;i++){
+        const interest = remaining*(rate/100);
+        totalInterest += interest;
+        remaining = Math.max(0, remaining-portion);
+        schedule.push({cycle:i, date:toISO(addCycles(start, cycleDays, i, excludeWeekends)), interest, balanceAfter:remaining});
+      }
+      return {schedule, totalInterest, totalRepay: principal+totalInterest};
+    }
+    // flexible
+    let bal = principal, totalInterest=0;
+    for(let i=1;i<=totalCycles;i++){
+      const interest = bal*(rate/100);
+      totalInterest += interest;
+      bal += interest; // nothing paid during projection — full compounding view
+      schedule.push({cycle:i, date:toISO(addCycles(start, cycleDays, i, excludeWeekends)), interest, balanceAfter:bal});
+    }
+    return {schedule, totalInterest, totalRepay: bal};
+  }
+
+  const OPEN_ENDED_PROJECTION_CYCLES = 12;
+
+  function updateCalculator(){
+    const amountInput = document.getElementById("cc-amount").value.trim();
+    const rateInput = document.getElementById("cc-rate").value.trim();
+    const termInput = document.getElementById("cc-term").value.trim();
+    const amount = parseFloat(amountInput) || 0;
+    const rate = parseFloat(rateInput) || 0;
+    const cycleValue = parseInt(document.getElementById("cc-cycle").value,10);
+    const cycleDays = Number.isFinite(cycleValue) ? cycleValue : 30;
+    const isOpenEnded = ccType !== "flat";
+    const term = isOpenEnded ? (cycleDays || 30)*OPEN_ENDED_PROJECTION_CYCLES : parseInt(termInput,10);
+    document.getElementById("cc-type-hint").textContent = typeHint(ccType) + (isOpenEnded ? ` (showing the next ${OPEN_ENDED_PROJECTION_CYCLES} cycles as an example — it actually runs until paid off)` : "");
+    const needsTerm = !isOpenEnded;
+    if(!amountInput || amount < 500 || !rateInput || rate <= 0 || (needsTerm && (!termInput || !term || term <= 0))){
+      document.getElementById("cc-schedule").innerHTML = "";
+      document.getElementById("cc-total-interest").textContent = "—";
+      document.getElementById("cc-total-repay").textContent = "—";
+      return;
+    }
+
+    if(cycleDays === 0 && ccType !== "flat"){
+      document.getElementById("cc-schedule").innerHTML = "";
+      document.getElementById("cc-total-interest").textContent = "—";
+      document.getElementById("cc-total-repay").textContent = "—";
+      document.getElementById("cc-type-hint").textContent = "Flexible collection is available for flat-rate loans only.";
+      return;
+    }
+    const ccSkip = cycleDays === 1 && (ccType === "flat" || document.getElementById("cc-skip-weekends").checked);
+    let result;
+    if(ccType === "flat"){
+      const start = todayISO();
+      const loanLike = {disbursedDate:start, term, cycleDays, excludeWeekends:ccSkip};
+      const dates = flatInstallmentDates(loanLike);
+      const totalInterest = amount * (rate/100) * flatInterestMonths(term, cycleDays, ccSkip);
+      const perInterest = totalInterest / dates.length;
+      const perPrincipal = amount / dates.length;
+      result = {totalInterest, totalRepay:amount+totalInterest, schedule:dates.map((date,i)=>({cycle:i+1,date,principal:perPrincipal,interest:perInterest,totalDue:perPrincipal+perInterest,balanceAfter:Math.max(0,amount-perPrincipal*(i+1))}))};
+    } else {
+      result = simulateGeneric(amount, rate, term, cycleDays, ccType, undefined, ccSkip);
+    }
+    const isFlat = ccType === "flat";
+    document.getElementById("cc-schedule-head").innerHTML = isFlat
+      ? `<th>Next due</th><th>Capital</th><th>Interest</th><th>Total to collect</th><th>Balance after</th>`
+      : `<th>Next due</th><th>Interest</th><th>Balance after</th>`;
+    const body = document.getElementById("cc-schedule");
+    body.innerHTML = result.schedule.map(s=> isFlat
+      ? `<tr><td>${fmtDate(s.date)}</td><td>${peso(s.principal)}</td><td>${peso(s.interest)}</td><td><strong>${peso(s.totalDue)}</strong></td><td>${peso(s.balanceAfter)}</td></tr>`
+      : `<tr><td>${fmtDate(s.date)}</td><td>${peso(s.interest)}</td><td>${s.balanceAfter!==null?peso(s.balanceAfter):"—"}</td></tr>`
+    ).join("");
+    document.getElementById("cc-total-interest").textContent = peso(result.totalInterest);
+    document.getElementById("cc-total-repay").textContent = peso(result.totalRepay);
+  }
+  ["cc-amount","cc-rate","cc-term","cc-cycle","cc-skip-weekends"].forEach(id=>{
+    document.getElementById(id).addEventListener("input", updateCalculator);
+  });
+  document.getElementById("cc-type-hint").textContent = typeHint(ccType);
+
+  /* ======================================================
+     PWA install + service worker (unchanged behaviour)
+  ====================================================== */
+  let deferredPrompt = null;
+  window.addEventListener("beforeinstallprompt", (e)=>{
+    e.preventDefault();
+    deferredPrompt = e;
+  });
+  if("serviceWorker" in navigator){
+    window.addEventListener("load", ()=>{
+      navigator.serviceWorker.register("service-worker.js").catch(()=>{});
+    });
+  }
+
+  /* ======================================================
+     Init
+  ====================================================== */
+  loadData();
+  renderAll();
+  updateCalculator();
+  initLock();
+
+})();
+</script>
+</body>
+</html>
